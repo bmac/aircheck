@@ -12,3 +12,11 @@ var onError = function() {
 
 navigator.webkitGetUserMedia({video: true, audio: true}, onSuccess, onError);
 
+var webrtc = new WebRTC({
+    // the id/element dom element that will hold "our" video
+    localVideoEl: 'localVideo',
+    // the id/element dom element that will hold remote videos
+    remoteVideosEl: 'remotesVideos',
+    // immediately ask for camera access
+    autoRequestMedia: true
+});
