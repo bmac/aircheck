@@ -20,3 +20,9 @@ var webrtc = new WebRTC({
     // immediately ask for camera access
     autoRequestMedia: true
 });
+
+// we have to wait until it's ready
+webrtc.on('readyToCall', function () {
+    // you can name it anything
+    webrtc.joinRoom('test room 12345 test test');
+});
