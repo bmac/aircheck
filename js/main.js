@@ -10,7 +10,7 @@
         console.log('an error occured ' , arguments);
     };
 
-    navigator.webkitGetUserMedia({video: true, audio: true}, onSuccess, onError);
+    //navigator.webkitGetUserMedia({video: true, audio: true}, onSuccess, onError);
 
     var webrtc = new WebRTC({
         // the id/element dom element that will hold "our" video
