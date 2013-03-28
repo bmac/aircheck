@@ -25,6 +25,11 @@
     webrtc.on('readyToCall', function () {
         // you can name it anything
         webrtc.joinRoom('test room 12345 test test');
+	var video = document.getElementById('localVideo').children[0];
+	window.rec = new Recorder(video);
+	rec.record();
     });
+
+    
 
 }());
