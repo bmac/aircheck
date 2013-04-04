@@ -30,7 +30,12 @@
 	var mediaSourceNode = context.createMediaElementSource(video);	
 	window.rec = new Recorder(mediaSourceNode, 
 				  {workerPath: 'js/vendor/recorderWorker.js'});
-	rec.record();
+	rec.record();	
+	
+    });
+
+    $('#stopRecording').click(function() {
+	rec.stop();
     });
 
     
