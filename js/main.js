@@ -14,8 +14,7 @@
 
     var createVideoElement = function(stream, attrs) {
         attrs = attrs || {};
-        var video = document.getElementById('video');
-        if (attrs)
+        var video = document.createElement('video');
         Object.keys(attrs).forEach(function(key) {
             video[key] = attrs[key];
         });
@@ -33,9 +32,10 @@
 
     rtc.on('add remote stream', function(stream, socketId) {
         var id = 'remote' + socketId;
+        debugger;
         var video = createVideoElement(stream, {id: id});
-        var remotesVideos = document.getElementById('remotesVideos');
-        remotesVideos.appendChild(video);
+        var remoteVideos = document.getElementById('remoteVideos');
+        remoteVideos.appendChild(video);
         video.play();
     });
     
