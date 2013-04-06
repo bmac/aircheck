@@ -12,32 +12,38 @@
 
     //navigator.webkitGetUserMedia({video: true, audio: true}, onSuccess, onError);
 
-    var webrtc = new WebRTC({
-        // the id/element dom element that will hold "our" video
-        localVideoEl: 'localVideo',
-        // the id/element dom element that will hold remote videos
-        remoteVideosEl: 'remotesVideos',
-        // immediately ask for camera access
-        autoRequestMedia: true
+    var createVideoElement = function(stream, attrs) {
+        attrs = attrs || {};
+        var video = document.getElementById('video');
+        if (attrs)
+        Object.keys(attrs).forEach(function(key) {
+            video[key] = attrs[key];
+        });
+        video.src = window.URL.createObjectURL(stream);
+        return video;
+    };
+
+    rtc.createStream({video: true, audio:false}, function(stream){
+        // get local stream for manipulation
+        var localVideo = document.getElementById('localVideo');
+        var video = createVideoElement(stream);
+        localVideo.appendChild(video);
+        video.play();
     });
 
-    // we have to wait until it's ready
-    webrtc.on('readyToCall', function () {
-        // you can name it anything
-        webrtc.joinRoom('test room 12345 test test');
-	var video = document.getElementById('localVideo').children[0];
-	var context = new webkitAudioContext();
-	var mediaSourceNode = context.createMediaElementSource(video);	
-	window.rec = new Recorder(mediaSourceNode, 
-				  {workerPath: 'js/vendor/recorderWorker.js'});
-	rec.record();	
-	
+    rtc.on('add remote stream', function(stream, socketId) {
+        var id = 'remote' + socketId;
+        var video = createVideoElement(stream, {id: id});
+        var remotesVideos = document.getElementById('remotesVideos');
+        remotesVideos.appendChild(video);
+        video.play();
     });
-
-    $('#stopRecording').click(function() {
-	rec.stop();
+    
+    rtc.on('disconnect stream', function(data) {
+        // TODO
     });
-
+    
+    rtc.connect('ws://localhost:8001');
     
 
 }());
