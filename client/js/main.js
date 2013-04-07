@@ -1,5 +1,24 @@
 (function() {
 
+// rtc events
+// 'disconnect stream'
+// 'connections'
+// 'receive ice candidate'
+// 'disconnect stream'
+// 'receive offer'
+// 'receive answer'
+// 'connect'
+// 'close_stream'
+// 'ice candidate'
+// 'peer connection opened'
+// 'add remote stream'
+// 'ready'
+// 'data stream open'
+// 'data stream close'
+// 'data stream data'
+// 'data stream error'
+
+
     var onSuccess = function(stream) {
         var video = document.getElementById('video');
         video.src = window.URL.createObjectURL(stream);
