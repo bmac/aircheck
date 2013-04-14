@@ -35,6 +35,11 @@
         var video = createVideoElement(stream);
         localVideo.appendChild(video);
         video.play();
+
+        var mediaSourceNode = context.createMediaElementSource(video);	
+	window.rec = new Recorder(mediaSourceNode, 
+				  {workerPath: 'js/vendor/recorderWorker.js'});
+	rec.record();
     });
 
     rtc.on('add remote stream', function(stream, socketId) {
