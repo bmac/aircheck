@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html class="no-js">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
 
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/main.css">
-    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
-  </head>
-  <body>
-    <div id="localVideo">
-      
-    </div>
-    <div id="remoteVideos">
-      
-    </div>
-    <video id="video" width="320" height="240" autoplay></video>
-    <a href="#" >Download Audio File</a>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
-      <script src="js/vendor/webrtc.io.js"></script>
-      <script src="js/vendor/recorder.js"></script>
-      
-      <script src="js/main.js"></script>
-  </body>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <script type="text/x-handlebars">
+            <h2>Welcome to Ember.js</h2>
+
+            {{outlet}}
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="index">
+            <ul>
+                {{#each item in model}}
+                <li>{{item}}</li>
+                {{/each}}
+            </ul>
+        </script>
+
+        <script src="js/libs/jquery-1.9.1.js"></script>
+        <script src="js/vendor/webrtc.io.js"></script>
+        <script src="js/vendor/recorder.js"></script>
+        <script src="js/libs/handlebars-1.0.0-rc.3.js"></script>
+        <script src="js/libs/ember-1.0.0-rc.2.js"></script>
+        <script src="js/app.js"></script>
+    </body>
 </html>
