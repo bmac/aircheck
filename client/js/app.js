@@ -2,10 +2,12 @@ App = Ember.Application.create();
 
 App.Router.map(function() {
   // put your routes here
+    this.route("room", { path: "/room" });
 });
+var l = Ember.HashLocation.create();
 
-App.IndexRoute = Ember.Route.extend({
-  model: function() {
-    return ['red', 'yellow', 'blue'];
-  }
+App.IndexController = Ember.Controller.extend({
+    goToRoom: function() {
+        l.setURL('room');
+    }
 });
