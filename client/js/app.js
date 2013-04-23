@@ -29,6 +29,16 @@ App.RoomController = Ember.ObjectController.extend({
             var objUrl = window.URL.createObjectURL(stream);
             self.set('videoSrc', objUrl);
         });
+        
+        rtc.on('add remote stream', function(stream, socketId) {
+            var otherVideos = self.get('otherVideos') || [];
+            otherVideos.push({
+                stream: stream,
+                socketId: socketId,
+                videoSrc: URL.createObjectURL(stream)
+            });
+            self.set('otherVideos', otherVideos);
+        });
         window.c = this;
     },
     roomNameObserver: function() {

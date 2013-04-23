@@ -22,7 +22,20 @@
 
         <script type="text/x-handlebars" data-template-name="room">
             <h1>{{ roomName }}</h1>
+            <section class="others">
+                {{#each otherVideos}}
+                <video {{bindAttr src=videoSrc }}></video>
+                {{/each}}
+            </section>
+            <section class="notes">
+                I'm editable
+            </section>
+            <section class="you">
             <video {{bindAttr src=videoSrc }} controls id="video"></video>
+            </section>
+            <section class="chat">
+                Some sort of chat view goes here
+            </section>
         </script>
 
         <script src="js/libs/jquery-2.0.0.js"></script>
