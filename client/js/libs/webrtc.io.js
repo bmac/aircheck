@@ -424,7 +424,7 @@ if (navigator.webkitGetUserMedia) {
 
     if (!id) throw new Error('attempt to createDataChannel with unknown id');
 
-    if (!pc || !(pc instanceof PeerConnection)) throw new Error('attempt to createDataChannel without peerConnection');
+    // if (!pc || !(pc instanceof PeerConnection)) throw new Error('attempt to createDataChannel without peerConnection');
 
     // need a label
     label = label || 'fileTransfer' || String(id);

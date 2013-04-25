@@ -23,6 +23,7 @@
         <script type="text/x-handlebars" data-template-name="room">
             <h1>{{ roomName }}</h1>
             <section class="others">
+                Other Videos: {{ otherVideos.length }}
                 {{#each otherVideos}}
                 <video {{bindAttr src=videoSrc }}></video>
                 {{/each}}
