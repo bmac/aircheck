@@ -39,10 +39,15 @@
             </section>
         </script>
 
-<script type="text/x-handlebars" data-template-name="array">
-    {{#each controller}}
-    
+<script type="text/x-handlebars" data-template-name="arraytest">
+    array test
+    {{#each controller }}
+    1
     {{/each}}
+    {{#each foo}}
+    foo
+    {{/each}}
+    <button {{ action addFoo }}>add foo</button>
 </script>
 
         <script src="js/libs/jquery-2.0.0.js"></script>
