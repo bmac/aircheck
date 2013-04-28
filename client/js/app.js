@@ -63,13 +63,3 @@ App.RoomController = Ember.ObjectController.extend({
     }.observes('roomName')
 });
 
-
-App.ArraytestController = Ember.ArrayController.extend({
-    foo: [3, 2, 1],
-    addFoo: function() {
-        var foo = this.get('foo');
-        foo.pushObject(1);
-        this.set('foo', foo);
-        window.c = this;
-    }
-});
