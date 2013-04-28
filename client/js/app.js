@@ -29,6 +29,7 @@ App.ArraytestRoute = Ember.Route.extend({
 });
 
 App.RoomController = Ember.ObjectController.extend({
+    otherVideos: [],
     init: function() {
         var self = this;
 
@@ -38,8 +39,8 @@ App.RoomController = Ember.ObjectController.extend({
         });
 
         rtc.on('add remote stream', function(stream, socketId) {
-            var otherVideos = self.get('otherVideos') || [];
-            otherVideos.push({
+            var otherVideos = self.get('otherVideos');
+            otherVideos.pushObject({
                 stream: stream,
                 socketId: socketId,
                 videoSrc: URL.createObjectURL(stream)
