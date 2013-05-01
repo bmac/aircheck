@@ -1,9 +1,8 @@
-App = Ember.Application.create();
+var App = Ember.Application.create();
 
 App.Router.map(function() {
     // put your routes here
     this.route("room", { path: "/room/:roomName" });
-    this.route("arraytest");
 });
 var l = Ember.HashLocation.create();
 
@@ -19,12 +18,6 @@ App.RoomRoute = Ember.Route.extend({
         return {
             roomName: params.roomName
         };
-    }
-});
-
-App.ArraytestRoute = Ember.Route.extend({
-    model: function(params) {
-        return [1, 2, 3];
     }
 });
 
@@ -63,4 +56,3 @@ App.RoomController = Ember.ObjectController.extend({
         }
     }.observes('roomName')
 });
-
