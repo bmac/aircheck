@@ -2,7 +2,7 @@ var App = Ember.Application.create();
 
 App.Router.map(function() {
     // put your routes here
-    this.route("room", { path: "/room/:roomName" });
+    this.route('room', { path: '/room/:roomName' });
 });
 var l = Ember.HashLocation.create();
 
