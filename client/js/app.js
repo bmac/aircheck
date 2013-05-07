@@ -26,7 +26,7 @@ App.RoomController = Ember.ObjectController.extend({
     init: function() {
         var self = this;
 
-        rtc.createStream({video: true, audio:false}, function(stream){
+        rtc.createStream({video: false, audio:true}, function(stream){
             var objUrl = window.URL.createObjectURL(stream);
             self.set('videoSrc', objUrl);
         });
@@ -36,9 +36,11 @@ App.RoomController = Ember.ObjectController.extend({
             otherVideos.pushObject({
                 stream: stream,
                 socketId: socketId,
-                videoSrc: URL.createObjectURL(stream)
+                videoSrc: URL.createObjectURL(stream),
+                //dataChannel: rtc.createDataChannel(socketId)
             });
             self.set('otherVideos', otherVideos);
+            
         });
 
         rtc.on('disconnect stream', function(socketId) {
