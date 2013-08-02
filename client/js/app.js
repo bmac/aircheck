@@ -26,7 +26,7 @@ App.RoomController = Ember.ObjectController.extend({
     init: function() {
         var self = this;
 
-        rtc.createStream({video: false, audio:true}, function(stream){
+        rtc.createStream({video: true, audio:true}, function(stream){
             var objUrl = window.URL.createObjectURL(stream);
             self.set('videoSrc', objUrl);
         });
