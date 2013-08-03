@@ -63,6 +63,7 @@ if (navigator.webkitGetUserMedia) {
   };
 
   rtc.fire = function(eventName, _) {
+      console.log('event fired', eventName);
     var events = rtc._events[eventName];
     var args = Array.prototype.slice.call(arguments, 1);
 
