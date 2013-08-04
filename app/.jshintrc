@@ -13,6 +13,9 @@
   "browser": true,
   "globals": {
     "define": false,
-    "require": false
+    "require": false,
+    "Ember": false,
+    "rtc": false,
+    "URL": false
   }
 }
