@@ -26,34 +26,13 @@ App.RoomController = Ember.ObjectController.extend({
     init: function() {
         var self = this;
 
-        rtc.createStream({video: true, audio:true}, function(stream){
-            var objUrl = window.URL.createObjectURL(stream);
-            self.set('videoSrc', objUrl);
-        });
-
-        rtc.on('add remote stream', function(stream, socketId) {
-            var otherVideos = self.get('otherVideos');
-            otherVideos.pushObject({
-                stream: stream,
-                socketId: socketId,
-                videoSrc: URL.createObjectURL(stream)
-                //dataChannel: rtc.createDataChannel(socketId)
-            });
-            self.set('otherVideos', otherVideos);            
-        });
-
-        rtc.on('disconnect stream', function(socketId) {
-            var otherVideos = self.get('otherVideos').reject(function(stream) {
-                return stream.socketId = socketId;
-            });
-            self.set('otherVideos', otherVideos);
-        });
+        
         window.c = this;
     },
     roomNameObserver: function() {
         // do not join an empty room
         if (this.get('roomName')) {
-            rtc.connect('ws://localhost:8001', this.get('roomName'));
+            
         }
     }.observes('roomName')
 });
