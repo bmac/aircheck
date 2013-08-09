@@ -4,5 +4,8 @@
   "dependencies": {
     "ember": "~1.0.0-rc.6",
     "jquery": "2.0.3"
+  },
+  "resolutions": {
+    "jquery": "2.0.3"
   }
 }
