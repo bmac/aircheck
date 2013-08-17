@@ -1,13 +1,25 @@
-var chat = {};
+var chat = {
+    signalServer: 'ws://localhost:8001/'
+};
 
 chat.joinRoom = function(roomName) {
-    rtc.connect('ws://localhost:8001/', roomName);
+    rtc.connect(chat.signalServer, roomName);
 };
 
 chat.startAV = function(cb) {
     rtc.createStream({video: true, audio:true}, function(stream){
         cb(stream);
     });
+};
+
+chat.createStream = function() {
+    var streamObject = Ember.Object.create();
+    rtc.createStream({video: true, audio:true}, function(stream){
+        var objUrl = window.URL.createObjectURL(stream);
+        streamObject.set('videoSrc', objUrl);
+        streamObject.set('stream', stream);
+    });
+    return streamObject;
 };
 
 chat.remotes = [];

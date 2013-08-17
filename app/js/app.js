@@ -27,14 +27,9 @@ App.RoomController = Ember.ObjectController.extend({
     init: function() {
         var self = this;
 
-        chat.startAV(function(stream){
-            var objUrl = window.URL.createObjectURL(stream);
-            self.set('videoSrc', objUrl);
-        });
+        self.set('myStream', chat.createStream());
 
         self.set('otherVideos', chat.remotes);
-
-        window.c = this;
     },
     roomNameObserver: function() {
         // do not join an empty room
