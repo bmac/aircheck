@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -43,12 +45,16 @@ module.exports = function(grunt) {
         connect: {
             dev: {
                 options: {
+                    keepalive: true,
                     middleware: function(connect, options) {
                         return [
-                            // Look for files in build/wwwroot.
-                            connect.static(__dirname + '/build/wwwroot'),
-                            // Then in the project root.
-                            connect.static(__dirname)
+                            connect.static(__dirname),
+                            function(req, res, next){
+                                fs.readFile(__dirname + '/index.html', function(err, buf){
+                                    if (err) return next(err);
+                                    res.end(buf);
+                                });
+                            }
                         ];
                     }
                 }

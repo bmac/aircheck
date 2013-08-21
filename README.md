@@ -6,9 +6,11 @@ Run client:
 
 `cd aircheck`
 
+`npm install`
+
 `bower install`
 
-`python -m SimpleHTTPServer`
+`grunt connect:dev`
 
 
 Run server:
