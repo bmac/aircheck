@@ -7,6 +7,11 @@
 
     chat.joinRoom = function(roomName) {
         rtc.connect(chat.signalServer, roomName);
+        return {
+            roomName: roomName,
+            myStream: chat.createStream(),
+            otherVideos: chat.remotes
+        };
     };
 
     chat.startAV = function(cb) {
