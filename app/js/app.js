@@ -1,3 +1,5 @@
+var chat = aircheck.chat;
+
 var App = Ember.Application.create();
 // var peer = App.peer = new Peer({key: '5u88fz5wmt7nl8fr'});
 
@@ -5,7 +7,11 @@ App.Router.map(function() {
     // put your routes here
     this.resource('room', { path: '/room/:room_name' });
 });
-var l = Ember.HashLocation.create();
+
+App.Router.reopen({
+    location: 'history',
+});
+
 
 App.IndexController = Ember.Controller.extend({
     goToRoom: function() {
