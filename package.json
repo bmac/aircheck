@@ -3,19 +3,19 @@
   "version": "0.0.1",
   "author": "bmac",
   "description": "",
-  "contributors": [ 
+  "contributors": [
     {
       "name": "Brendan McLoughlin",
       "email": "bmac325@gmail.com"
-    } 
+    }
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bmac/aircheck"
   },
   "keywords": [],
-  "dependencies" : {
-    "webrtc.io" :  "0.0.4"
+  "dependencies": {
+    "webrtc.io": "0.0.4"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -25,7 +25,20 @@
     "grunt-contrib-connect": "~0.3.0",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-clean": "~0.4.1",
-    "grunt-gh-pages": "~0.6.0"
+    "grunt-gh-pages": "~0.6.0",
+    "load-grunt-tasks": "~0.1.0",
+    "karma-script-launcher": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.0",
+    "karma-firefox-launcher": "~0.1.0",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-jasmine": "~0.1.2",
+    "karma-requirejs": "~0.1.0",
+    "karma-coffee-preprocessor": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.0",
+    "karma": "~0.10.2",
+    "grunt-karma": "~0.6.1",
+    "karma-qunit": "~0.1.0",
+    "karma-coverage": "~0.1.0"
   },
   "license": "MIT",
   "engines": {

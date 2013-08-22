@@ -78,15 +78,35 @@ module.exports = function(grunt) {
                 files: ['<%= handlebars.templates.src %>'],
                 tasks: ['handlebars']
             }
+        },
+        karma: {
+            options: {
+                configFile: 'karma.conf.js',
+                browsers: ['Chrome'],
+                reporters: ['coverage', 'dots']
+            },
+            ci: {
+                singleRun: true,
+                browsers: ['PhantomJS']
+            },
+            test: {
+                singleRun: true
+            },
+            server: {
+                background: true,
+                coverageReporter: {
+                    type : ['html'],
+                    dir : 'coverage/'
+                }
+            },
+            browsers: {
+                singleRun: true,
+                browsers: ['Chrome', 'ChromeCanary', 'Safari', 'Firefox', 'PhantomJS']
+            }
         }
     });
-
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-clean');
+    
+    require('load-grunt-tasks')(grunt);
 
     grunt.registerTask('build',
                        'Build site files for testing or deployment.',
