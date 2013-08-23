@@ -112,13 +112,9 @@ module.exports = function(grunt) {
                        'Build site files for testing or deployment.',
                        ['jshint', 'clean', 'requirejs:prod' ]);
 
-    grunt.registerTask('deploy',
-                       'Deploy site via gh-pages.',
-                       ['build', 'gh-pages']);
-
     grunt.registerTask('dev',
                        'Start a live-reloading dev webserver on localhost.',
-                       ['jshint', 'clean', 'connect:dev', 'watch']);
+                       ['jshint', 'clean', 'karma:test', 'connect:dev']); //, 'watch']);
 
     grunt.registerTask('prod',
                        'Publish to build/wwwroot and start a webserver on localhost.',

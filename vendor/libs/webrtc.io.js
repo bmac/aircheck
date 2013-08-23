@@ -39,12 +39,13 @@ if (navigator.webkitGetUserMedia) {
 (function() {
 
   var rtc;
-  if ('undefined' === typeof module) {
-    rtc = this.rtc = {};
-  } else {
-    rtc = module.exports = {};
-  }
-  
+  // if ('undefined' === typeof module) {
+  //   rtc = this.rtc = {};
+  // } else {
+  //   rtc = module.exports = {};
+  // }
+  rtc = this.rtc = {};
+
   // Toggle debug mode (console.log)
   rtc.debug = false;
   
