@@ -14,12 +14,6 @@
         };
     };
 
-    chat.startAV = function(cb) {
-        rtc.createStream({video: true, audio:true}, function(stream){
-            cb(stream);
-        });
-    };
-
     chat.createStream = function() {
         var streamObject = Ember.Object.create();
         rtc.createStream({video: true, audio:true}, function(stream){
