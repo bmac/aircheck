@@ -16,7 +16,7 @@ module.exports = function(config) {
             'bower_components/ember/ember.js',
             'app/js/chat.js',
             'app/js/app.js',
-            'test/tests.js'
+            'test/*.js'
         ],
 
         frameworks: ['qunit'],
