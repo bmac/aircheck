@@ -1,33 +1,51 @@
-(function() {
-    var chat = {
+window.aircheck = window.aircheck || {};
+window.aircheck.chat = (function() {
+    var RSVP = Ember.RSVP;
+
+    var config = {
         signalServer: 'ws://localhost:8001/'
     };
 
+    var rooms = {};
+    var remotes = [];
+
     var rtc = window.rtc;
 
-    chat.joinRoom = function(roomName) {
-        rtc.connect(chat.signalServer, roomName);
-        return {
-            roomName: roomName,
-            myStream: chat.createStream(),
-            otherVideos: chat.remotes
-        };
-    };
+    // This should return a promise
+    var joinRoom = function(roomName) {
+        rtc.connect(config.signalServer, roomName);
+        return createStream().then(function(streamObject) {
+            var room = {
+                name: roomName,
+                myStream: createStream(),
+                otherVideos: remotes
+            };
 
-    chat.createStream = function() {
-        var streamObject = Ember.Object.create();
-        rtc.createStream({video: true, audio:true}, function(stream){
-            var objUrl = window.URL.createObjectURL(stream);
-            streamObject.set('videoSrc', objUrl);
-            streamObject.set('stream', stream);
+            rooms[room.name] = room;
+
+            return room;
         });
-        return streamObject;
     };
 
-    chat.remotes = [];
+    var createStream = function() {
+        var promise = new RSVP.Promise(function(resolve, reject){
+            rtc.createStream({video: true, audio:true}, function(stream){
+                var objUrl = URL.createObjectURL(stream);
+                var streamObject = {
+                    videoSrc: objUrl,
+                    stream: stream
+                };
+
+                resolve(streamObject);
+            });
+        });
+
+        return promise;
+    };
+
 
     rtc.on('add remote stream', function(stream, socketId) {
-        chat.remotes.pushObject({
+        remotes.pushObject({
             stream: stream,
             socketId: socketId,
             videoSrc: URL.createObjectURL(stream)
@@ -35,19 +53,21 @@
     });
 
     rtc.on('disconnect stream', function(socketId) {
-        var remoteObj = chat.remotes.find(function(obj) {
+        var remoteObj = remotes.find(function(obj) {
             return obj.socketId === socketId;
         });
 
-        chat.remotes.removeObject(remoteObj);
+        remotes.removeObject(remoteObj);
     });
 
-    chat.sendAll = function(msg) {
-        Object.keys(rtc.dataChannels).forEach(function(key) {
-            rtc.dataChannels[key].send(msg);
-        });
-    };
+    // var sendAll = function(msg) {
+    //     Object.keys(rtc.dataChannels).forEach(function(key) {
+    //         rtc.dataChannels[key].send(msg);
+    //     });
+    // };
 
-    window.aircheck = window.aircheck || {};
-    window.aircheck.chat = chat;
+
+    return {
+        joinRoom: joinRoom
+    };
 }());

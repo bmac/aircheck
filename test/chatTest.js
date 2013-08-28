@@ -1,6 +1,6 @@
 test( 'chat', 2, function() {
-  ok( aircheck, 'aircheck is defined');
-  ok( aircheck.chat, 'aircheck is defined');
+    ok( aircheck, 'aircheck is defined');
+    ok( aircheck.chat, 'aircheck is defined');
 });
 
 
@@ -9,8 +9,10 @@ test( 'chat', 2, function() {
 rtc.connect = function(){};
 rtc.createStream = function(config, cb){  };
 test('join room', 2, function() {
-    var room = chat.joinRoom('my room');
+    var roomPromise = chat.joinRoom('my room');
 
-    equal(room.roomName, 'my room');
-    deepEqual(room.otherVideos, []);
+    roomPromise.then(function(room) {
+        equal(room.roomName, 'my room');
+        deepEqual(room.otherVideos, []);
+    });
 });
