@@ -1,4 +1,5 @@
-var chat = aircheck.chat;
+//var chat = aircheck.chat;
+var chat = {};
 
 var App = Ember.Application.create();
 // var peer = App.peer = new Peer({key: '5u88fz5wmt7nl8fr'});
