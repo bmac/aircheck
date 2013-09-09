@@ -15,7 +15,7 @@ var joinRoom = function(roomName) {
     return createStream().then(function(streamObject) {
         var room = {
             name: roomName,
-            myStream: createStream(),
+            myStream: streamObject,
             otherVideos: remotes
         };
 
@@ -27,20 +27,23 @@ var joinRoom = function(roomName) {
 
 var createStream = function() {
     var promise = new RSVP.Promise(function(resolve, reject){
-        rtc.createStream({video: true, audio:true}, function(stream){
+        rtc.createStream({video:true, audio:true}, function(stream){
+            try {
             var objUrl = URL.createObjectURL(stream);
             var streamObject = {
                 videoSrc: objUrl,
                 stream: stream
             };
-
             resolve(streamObject);
+
+            } catch (error) {
+                reject(stream);
+            }
         });
     });
 
     return promise;
 };
-
 
 rtc.on('add remote stream', function(stream, socketId) {
     remotes.pushObject({
@@ -63,7 +66,6 @@ rtc.on('disconnect stream', function(socketId) {
 //         rtc.dataChannels[key].send(msg);
 //     });
 // };
-
 
 var chat = {
     joinRoom: joinRoom

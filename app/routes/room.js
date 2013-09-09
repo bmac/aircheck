@@ -1,4 +1,4 @@
-import chat from 'helpers/chat';
+import chat from 'aircheck/helpers/chat';
 
 var RoomRoute = Ember.Route.extend({
     model: function(params) {
