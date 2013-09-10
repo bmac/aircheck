@@ -7,15 +7,10 @@ module("Acceptances - Index", {
   }
 });
 
-test("index renders", function(){
+test("index renders", 1, function(){
   // expect(3);
-  expect(0);
 
   visit('/').then(function(){
-    // ok(exists("h2:contains('Welcome to Ember.js')"));
-
-    // var list = find("ul li");
-    // equal(list.length, 3);
-    // equal(list.text(), "redyellowblue");
+    ok(exists("label[for='roomName']:contains('Enter room name:')"));
   });
 });
