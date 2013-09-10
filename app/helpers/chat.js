@@ -27,16 +27,12 @@ var joinRoom = function(roomName) {
 var createStream = function() {
     var deferred = $.Deferred();
     rtc.createStream({video:true, audio:true}, function(stream){
-        try {
-            var objUrl = URL.createObjectURL(stream);
-            var streamObject = {
-                videoSrc: objUrl,
-                stream: stream
-            };
-            deferred.resolve(streamObject);
-        } catch (error) {
-            deferred.reject(stream);
-        }
+        var objUrl = URL.createObjectURL(stream);
+        var streamObject = {
+            videoSrc: objUrl,
+            stream: stream
+        };
+        deferred.resolve(streamObject);
     });
 
     return deferred.promise();
@@ -65,7 +61,8 @@ rtc.on('disconnect stream', function(socketId) {
 // };
 
 var chat = {
-    joinRoom: joinRoom
+    joinRoom: joinRoom,
+    _remotes: remotes
 };
 
 export default chat;
