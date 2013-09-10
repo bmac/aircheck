@@ -41,7 +41,8 @@
     "lockfile": "~>0.3.0",
     "grunt-concat-sourcemap": "~0.3.0",
     "grunt-dom-munger": "~2.0.1",
-    "karma-chrome-launcher": "~0.1.0"
+    "karma-chrome-launcher": "~0.1.0",
+    "grunt-concat-css": "~0.1.0"
   },
   "license": "MIT",
   "engines": {
