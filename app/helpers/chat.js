@@ -20,29 +20,26 @@ var joinRoom = function(roomName) {
         };
 
         rooms[room.name] = room;
-
         return room;
     });
 };
 
 var createStream = function() {
-    var promise = new RSVP.Promise(function(resolve, reject){
-        rtc.createStream({video:true, audio:true}, function(stream){
-            try {
+    var deferred = $.Deferred();
+    rtc.createStream({video:true, audio:true}, function(stream){
+        try {
             var objUrl = URL.createObjectURL(stream);
             var streamObject = {
                 videoSrc: objUrl,
                 stream: stream
             };
-            resolve(streamObject);
-
-            } catch (error) {
-                reject(stream);
-            }
-        });
+            deferred.resolve(streamObject);
+        } catch (error) {
+            deferred.reject(stream);
+        }
     });
 
-    return promise;
+    return deferred.promise();
 };
 
 rtc.on('add remote stream', function(stream, socketId) {
