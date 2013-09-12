@@ -1,5 +1,6 @@
 {
   "predef": [
+    "URL",
     "document",
     "window",
     "location",
@@ -7,6 +8,7 @@
     "Ember",
     "Em",
     "$",
+    "QUnit",
     "define",
     "console",
     "require",
@@ -32,8 +34,7 @@
     "exists",
     "fillIn",
     "click",
-    "find",
-    "URL"
+    "find"
   ],
   "node" : false,
   "browser" : false,

@@ -49,7 +49,7 @@ module.exports = function(config) {
     },
 
     // web server port
-    port: 9876,
+    port: parseInt(process.env.PORT, 10) + 1 || 9876,
 
     // cli runner port
     runnerPort: 9100,

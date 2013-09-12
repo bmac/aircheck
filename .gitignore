@@ -1,8 +1,18 @@
-node_modules
-bower_components
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+
+# dependencies
+/node_modules
+/vendor/*
+!/vendor/loader.js
+!/vendor/libs/*
+
+# misc
+/.sass-cache
+/connect.lock
+/libpeerconnection.log
+.DS_Store
 coverage
-vendor/ember-prod/
-vendor/ember/
-vendor/handlebars/
-vendor/jquery/
-vendor/qunit/

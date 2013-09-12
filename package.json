@@ -18,6 +18,16 @@
   "dependencies": {
     "webrtc.io": "0.0.4"
   },
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "grunt server",
+    "build": "grunt build:debug",
+    "test": "grunt test:ci"
+  },
   "devDependencies": {
     "grunt-contrib-connect": "~0.3.0",
     "grunt": "~0.4.1",
@@ -40,12 +50,13 @@
     "karma-phantomjs-launcher": "~0.0.2",
     "lockfile": "~>0.3.0",
     "grunt-concat-sourcemap": "~0.3.0",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-concurrent": "~0.3.1",
     "grunt-dom-munger": "~2.0.1",
-    "karma-chrome-launcher": "~0.1.0",
-    "grunt-concat-css": "~0.1.0"
+    "karma-chrome-launcher": "~0.1.0"
   },
   "license": "MIT",
   "engines": {
     "node": ">=0.8"
-  }
+  }  
 }
