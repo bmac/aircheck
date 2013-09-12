@@ -10,6 +10,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'vendor/libs/webrtc.io.js',
+      'vendor/libs/irc-protocol.js',
       'vendor/loader.js',
       'vendor/jquery/jquery.js',
       'vendor/handlebars/handlebars.js',

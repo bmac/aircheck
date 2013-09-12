@@ -4,11 +4,18 @@
     {{#each otherVideos}}
     <div class="pull-left other-group">
         <label class="other-label">{{ socketId }}</label>
-        <video {{bindAttr src=videoSrc }} autoplay class="other"></video>
+        <video {{bindAttr src=videoSrc }} controls class="other"></video>
     </div>
     {{/each}}
     <div class="clearfix"></div>
 </section>
 <section class="you">
-    <video {{bindAttr src=myStream.videoSrc }} autoplay id="video"></video>
+    <video {{bindAttr src=myStream.videoSrc }} controls id="video"></video>
+</section>
+<section class="messages">
+{{#each messages}}
+    <div >
+        {{ time }} &lt;{{nick}}&gt; {{msg}}
+    </div>
+    {{/each}}
 </section>

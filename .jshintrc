@@ -1,6 +1,7 @@
 {
   "predef": [
     "URL",
+    "IRCProtocol",
     "document",
     "window",
     "location",

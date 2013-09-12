@@ -6,17 +6,28 @@ var config = {
 
 var rooms = {};
 var remotes = [];
+var messages = [];
 
 var rtc = window.rtc;
 
+
+var parser = new IRCProtocol.Parser();
+var serialiser = new IRCProtocol.Serialiser();
+
 // This should return a promise
-var joinRoom = function(roomName) {
+var joinRoom = function(nick, roomName) {
     rtc.connect(config.signalServer, roomName);
+    chat._prefix = {nick: nick,
+                    user: rtc._me,
+                    server: roomName};
+    chat.roomName = roomName;
+
     return createStream().then(function(streamObject) {
         var room = {
             name: roomName,
             myStream: streamObject,
-            otherVideos: remotes
+            otherVideos: remotes,
+            messages: messages
         };
 
         rooms[room.name] = room;
@@ -54,15 +65,30 @@ rtc.on('disconnect stream', function(socketId) {
     remotes.removeObject(remoteObj);
 });
 
-// var sendAll = function(msg) {
-//     Object.keys(rtc.dataChannels).forEach(function(key) {
-//         rtc.dataChannels[key].send(msg);
-//     });
-// };
+var sendAll = function(msg) {
+    var ircMsg = serialiser.format_message({prefix: chat._prefix, command: 'PRIVMSG', parameters: [chat.roomName, msg]});
+    var channels = Object.keys(rtc.dataChannels).map(function(key) {
+        return rtc.dataChannels[key];
+    });
+    channels.filter(function(channel) {
+        return channel.readyState === 'open';
+    }).forEach(function(channel) {
+        channel.send(ircMsg);
+    });
+};
+
+rtc.on('data stream data', function(data, msg) {
+    var ircMsg = parser.parse(msg);
+    if (ircMsg.command === 'PRIVMSG' && ircMsg.parameters[0] === chat.roomName) {
+        messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now()});
+    }
+});
 
 var chat = {
     joinRoom: joinRoom,
-    _remotes: remotes
+    sendAll: sendAll,
+    _remotes: remotes,
+    _messages: messages
 };
 
 export default chat;
