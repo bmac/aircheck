@@ -3,7 +3,7 @@
   Other Videos: {{ otherVideos.length }}
   {{#each otherVideos}}
   <label>{{ socketId }}</label>
-  <video {{bindAttr src=videoSrc }}></video>
+  <video {{bindAttr src=videoSrc }} autoplay class="others"></video>
   {{/each}}
 </section>
   <section class="you">
