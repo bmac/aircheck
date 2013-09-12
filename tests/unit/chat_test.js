@@ -28,7 +28,7 @@ test('remote user added', 1, function() {
     var stream = {},
         socketId = '12345',
         videoSrc = 'videoSrc';
-    URL.createObjectURL = function() {return videoSrc};
+    URL.createObjectURL = function() {return videoSrc;};
 
     rtc.fire('add remote stream', stream, socketId);
     deepEqual(chat._remotes[0], {
