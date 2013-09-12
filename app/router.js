@@ -1,3 +1,7 @@
+Ember.Router.reopen({
+  location: 'history'
+});
+
 var router = Ember.Router.map(function(){
     this.resource('room', { path: '/room/:room_name' });
   // this.resource('posts', function() {

@@ -299,11 +299,34 @@ textarea {
     }
 }
 
+.pull-left {
+    float: left;
+}
 
-video {
+.clearfix {
+  *zoom: 1;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.other-label {
+    display: block;
+}
+
+.other {
     height: 150px;
 }
 
-.others {
-    height: 200px;
+.other-group {
+    width: 200px;
+    padding: 20px;
 }

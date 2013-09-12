@@ -1,11 +1,14 @@
 <h1>{{ roomName }}</h1>
-<section class="others">
-  Other Videos: {{ otherVideos.length }}
-  {{#each otherVideos}}
-  <label>{{ socketId }}</label>
-  <video {{bindAttr src=videoSrc }} autoplay class="others"></video>
-  {{/each}}
+<section class="others clearfix">
+    <div>Other Videos: {{ otherVideos.length }}</div>
+    {{#each otherVideos}}
+    <div class="pull-left other-group">
+        <label class="other-label">{{ socketId }}</label>
+        <video {{bindAttr src=videoSrc }} autoplay class="other"></video>
+    </div>
+    {{/each}}
+    <div class="clearfix"></div>
 </section>
-  <section class="you">
-  <video {{bindAttr src=myStream.videoSrc }} autoplay id="video"></video>
+<section class="you">
+    <video {{bindAttr src=myStream.videoSrc }} autoplay id="video"></video>
 </section>
