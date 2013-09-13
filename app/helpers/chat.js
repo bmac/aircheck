@@ -16,8 +16,9 @@ var serialiser = new IRCProtocol.Serialiser();
 
 // This should return a promise
 var joinRoom = function(nick, roomName) {
+    var validNick = nick.replace(/\s+/g, '_');
     rtc.connect(config.signalServer, roomName);
-    chat._prefix = {nick: nick,
+    chat._prefix = {nick: validNick,
                     user: rtc._me,
                     server: roomName};
     chat.roomName = roomName;
@@ -36,17 +37,17 @@ var joinRoom = function(nick, roomName) {
 };
 
 var createStream = function() {
-    var deferred = $.Deferred();
-    rtc.createStream({video:true, audio:true}, function(stream){
-        var objUrl = URL.createObjectURL(stream);
-        var streamObject = {
-            videoSrc: objUrl,
-            stream: stream
-        };
-        deferred.resolve(streamObject);
+    var promise = new Ember.RSVP.Promise(function(resolve, reject) {
+        rtc.createStream({video:true, audio:true}, function(stream){
+            var objUrl = URL.createObjectURL(stream);
+            var streamObject = {
+                videoSrc: objUrl,
+                stream: stream
+            };
+            resolve(streamObject);
+        });
     });
-
-    return deferred.promise();
+    return promise;
 };
 
 rtc.on('add remote stream', function(stream, socketId) {
@@ -79,8 +80,9 @@ var sendAll = function(msg) {
 
 rtc.on('data stream data', function(data, msg) {
     var ircMsg = parser.parse(msg);
+    console.log('ircMsg', ircMsg);
     if (ircMsg.command === 'PRIVMSG' && ircMsg.parameters[0] === chat.roomName) {
-        messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now()});
+        messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now(), type: 'msg'});
     }
 });
 

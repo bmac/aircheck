@@ -13,6 +13,7 @@
     <video {{bindAttr src=myStream.videoSrc }} controls id="video"></video>
 </section>
 <section class="messages">
+{{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
 {{#each messages}}
     <div >
         {{ time }} &lt;{{nick}}&gt; {{msg}}

@@ -330,3 +330,7 @@ textarea {
     width: 200px;
     padding: 20px;
 }
+
+.you video {
+    height: 200px;
+}
