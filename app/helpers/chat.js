@@ -57,8 +57,6 @@ rtc.on('add remote stream', function(stream, socketId) {
         socketId: socketId,
         videoSrc: URL.createObjectURL(stream)
     });
-    var ircMsg = {prefix: chat._prefix, command: 'USER', parameters: []};
-    sendIrcMsg(ircMsg, socketId);
 });
 
 rtc.on('data stream open', function(stream, socketId) {

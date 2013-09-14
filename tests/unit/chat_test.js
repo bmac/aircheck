@@ -14,13 +14,15 @@ rtc.createStream = function(config, cb){
 };
 URL.createObjectURL = function() {};
 
-asyncTest('join room', 2, function() {
-    var roomPromise = chat.joinRoom('nick', 'my room');
-
-    roomPromise.then(function(room) {
-        equal(room.name, 'my room');
-        deepEqual(room.otherVideos, []);
-        start();
+test('join room', 2, function() {
+    Ember.run(function() {
+        var roomPromise = chat.joinRoom('nick', 'my room');
+        roomPromise.then(function(room) {
+            equal(room.name, 'my room');
+            deepEqual(room.otherVideos, []);
+            start();
+        });
+        stop();
     });
 });
 
