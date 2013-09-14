@@ -3,6 +3,10 @@ import chat from 'aircheck/helpers/chat';
 module("Unit - chat", {
     setup: function() {
         chat._remotes.clear();
+        Ember.testing = false;
+    },
+    teardown: function() {
+        Ember.testing = true;
     }
 });
 // todo get a real stubing library
@@ -15,15 +19,13 @@ rtc.createStream = function(config, cb){
 URL.createObjectURL = function() {};
 
 test('join room', 2, function() {
-    Ember.run(function() {
-        var roomPromise = chat.joinRoom('nick', 'my room');
-        roomPromise.then(function(room) {
-            equal(room.name, 'my room');
-            deepEqual(room.otherVideos, []);
-            start();
-        });
-        stop();
+    var roomPromise = chat.joinRoom('nick', 'my room');
+    roomPromise.then(function(room) {
+        equal(room.name, 'my room');
+        deepEqual(room.otherVideos, []);
+        start();
     });
+    stop();
 });
 
 test('remote user added', 1, function() {
