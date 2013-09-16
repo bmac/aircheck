@@ -90,9 +90,9 @@ Room.prototype._parseUserMsg = function(ircMsg) {
 };
 
 Room.prototype._parsePrivMsg = function(ircMsg) {
-    if (ircMsg.parameters[0] === this.name) {
-        this.messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now(), type: 'msg'});
-    }
+    //if (ircMsg.parameters[0] === this.name) {
+    this.messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now(), type: 'msg'});
+    //}
 };
 
 Room.prototype._setupEvents = function() {

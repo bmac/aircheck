@@ -14,7 +14,7 @@
 </section>
 <section class="messages">
 {{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
-<button {{action 'sendMessage' message}}>Send</button>
+<button class="send" {{action 'sendMessage' message}}>Send</button>
 {{#each messages}}
     <div >
         {{ time }} &lt;{{nick}}&gt; {{msg}}

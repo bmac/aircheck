@@ -7,7 +7,6 @@ module.exports = {
     ]
   },
   options: {
-    jshintrc: '.jshintrc',
-    force: true
+    jshintrc: '.jshintrc'
   }
 };
