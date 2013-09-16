@@ -4,13 +4,7 @@ var config = {
     signalServer: 'ws://localhost:8001/'
 };
 
-var rooms = {};
-var remotes = [];
-var messages = [];
-
 var rtc = window.rtc;
-
-
 var parser = new IRCProtocol.Parser();
 var serialiser = new IRCProtocol.Serialiser();
 
@@ -18,21 +12,18 @@ var serialiser = new IRCProtocol.Serialiser();
 var joinRoom = function(nick, roomName) {
     var validNick = nick.replace(/\s+/g, '_');
     rtc.connect(config.signalServer, roomName);
-    chat._prefix = {nick: validNick,    
+    chat._prefix = {nick: validNick,
                     server: roomName};
-    chat.roomName = roomName;
 
     return createStream().then(function(streamObject) {
-        var room = {
-            nick: nick,
+        var room = new Room({
             name: roomName,
-            myStream: streamObject,
-            otherVideos: remotes,
-            messages: messages
-        };
-        chat._prefix.user = rtc._me;
-
-        rooms[room.name] = room;
+            user: {
+                nick: nick,
+                videoSrc: streamObject.videoSrc,
+                stream: streamObject.stream
+            }
+        });
         return room;
     });
 };
@@ -51,42 +42,47 @@ var createStream = function() {
     return promise;
 };
 
-rtc.on('add remote stream', function(stream, socketId) {
-    remotes.pushObject({
-        stream: stream,
-        socketId: socketId,
-        videoSrc: URL.createObjectURL(stream)
-    });
-});
-
-rtc.on('data stream open', function(stream, socketId) {
-    var ircMsg = {prefix: chat._prefix, command: 'USER', parameters: []};
-    sendIrcMsg(ircMsg, socketId);
-});
-
-var sendNick = function(nick) {
-    var ircMsg = {prefix: chat._prefix, command: 'NICK', parameters: [nick]};
+var Room = function(config) {
+    this.peers = [];
+    this.messages = [];
+    this.user = {};
+    this.name = '';
+    Ember.merge(this, config);
+    this._setupEvents();
 };
 
-rtc.on('disconnect stream', function(socketId) {
-    var remoteObj = remotes.find(function(obj) {
-        return obj.socketId === socketId;
+/*
+ * Public API
+ */
+
+Room.prototype.send = function(msg) {
+    var ircMsg = {
+        prefix: this._prefix(),
+        command: 'PRIVMSG',
+        parameters: [chat.name, msg]
+    };
+    // send the message to all peers
+    this._sendIrcMsg(ircMsg); 
+    // store the message locally
+    this.messages.pushObject({
+        nick: ircMsg.prefix.nick,
+        msg: ircMsg.parameters[1],
+        time: Date.now(),
+        type: 'msg'
     });
-
-    remotes.removeObject(remoteObj);
-});
-
-var sendAll = function(msg) {
-    var ircMsg = {prefix: chat._prefix, command: 'PRIVMSG', parameters: [chat.roomName, msg]};
-    pushMessage(ircMsg); // stores it locally
-    sendIrcMsg(ircMsg); // sends the message to all peers
 };
 
-var sendIrcMsg = function(ircMsg, socketId) {
+/*
+ * Priavte API
+ */
+
+Room.prototype._sendIrcMsg = function(ircMsg, socketId) {
     var channels = [];
     if (socketId) {
         channels = [rtc.dataChannels[socketId]];
     } else {
+        // Currently we only support 1 room so rtc.dataChannels should only 
+        // contain users from our room
         channels = Object.keys(rtc.dataChannels).map(function(key) {
             return rtc.dataChannels[key];
         });
@@ -98,41 +94,72 @@ var sendIrcMsg = function(ircMsg, socketId) {
     });
 };
 
-rtc.on('data stream data', function(data, msg) {
-    var ircMsg = parser.parse(msg);
-    switch (ircMsg.command) {
-    case 'PRIVMSG':
-        if (ircMsg.parameters[0] === chat.roomName) {
-            pushMessage(ircMsg);
-        }
-        break;
-        // respont to WHOIS
+Room.prototype._prefix = function() {
+    return {
+        nick: this.user.nick,
+        server: this.name,
+        user: rtc._me
+    };
+};
 
-        // respond to NICK
-
-        // respond to USER
-    case 'USER':
-        userJoined(ircMsg);
-        break;
-    }
-});
-
-var userJoined = function(ircMsg) {
-    var remoteUser = remotes.find(function(remote) {
+Room.prototype._parseUserMsg = function(ircMsg) {
+    var remoteUser = this.peers.find(function(remote) {
         return remote.socketId === ircMsg.prefix.user;
     });
     Ember.set(remoteUser, 'nick', ircMsg.prefix.nick);
 };
 
-var pushMessage = function(ircMsg) {
-    messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now(), type: 'msg'});
+Room.prototype._parsePrivMsg = function(ircMsg) {
+    if (ircMsg.parameters[0] === this.name) {
+        this.messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now(), type: 'msg'});
+    }
+};
+
+Room.prototype._setupEvents = function() {
+    var room = this;
+    rtc.on('add remote stream', function(stream, socketId) {
+        room.peers.pushObject({
+            nick: '',
+            stream: stream,
+            socketId: socketId,
+            videoSrc: URL.createObjectURL(stream)
+        });
+    });
+
+    rtc.on('data stream open', function(stream, socketId) {
+        var ircMsg = {prefix: room._prefix(), command: 'USER', parameters: []};
+        room._sendIrcMsg(ircMsg, socketId);
+    });
+
+    rtc.on('disconnect stream', function(socketId) {
+        var remoteObj = room.peers.find(function(obj) {
+            return obj.socketId === socketId;
+        });
+
+        room.peers.removeObject(remoteObj);
+    });
+
+    rtc.on('data stream data', function(data, msg) {
+        var ircMsg = parser.parse(msg);
+        switch (ircMsg.command) {
+        case 'PRIVMSG':
+            room._parsePrivMsg(ircMsg);
+            break;
+            // respont to WHOIS
+
+            // respond to NICK
+
+            // respond to USER
+        case 'USER':
+            room._parseUserMsg(ircMsg);
+            break;
+        }
+    });
+
 };
 
 var chat = {
-    joinRoom: joinRoom,
-    sendAll: sendAll,
-    _remotes: remotes,
-    _messages: messages
+    joinRoom: joinRoom
 };
 
 export default chat;
