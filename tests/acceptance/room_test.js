@@ -1,4 +1,3 @@
-import Index from 'aircheck/routes/index';
 import App from 'aircheck/app';
 import chat from 'aircheck/helpers/chat';
 
@@ -11,7 +10,7 @@ module("Acceptances - Room", {
   }
 });
 
-test("index renders", 1, function(){
+test("room renders", 1, function(){
   this.stub(chat, 'joinRoom', function() {
       return Ember.RSVP.resolve({
           peers: []
