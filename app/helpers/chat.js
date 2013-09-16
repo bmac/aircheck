@@ -12,14 +12,12 @@ var rtc = window.rtc;
 var joinRoom = function(nick, roomName) {
     var validNick = nick.replace(/\s+/g, '_');
     rtc.connect(config.signalServer, roomName);
-    chat._prefix = {nick: validNick,
-                    server: roomName};
 
     return createStream().then(function(streamObject) {
         var room = new Room({
             name: roomName,
             user: {
-                nick: nick,
+                nick: validNick,
                 videoSrc: streamObject.videoSrc,
                 stream: streamObject.stream
             }

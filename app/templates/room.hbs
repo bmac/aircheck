@@ -1,9 +1,9 @@
-<h1>Room: {{ name }}, Nick: {{ nick }}</h1>
+<h1>Room: {{ name }}, Nick: {{ user.nick }}</h1>
 <section class="others clearfix">
     <div>Other Videos: {{ peers.length }}</div>
     {{#each peers}}
     <div class="pull-left other-group">
-        <label class="other-label">{{ user.nick }}</label>
+        <label class="other-label">{{ nick }}</label>
         <video {{bindAttr src=videoSrc }} autoplay class="other"></video>
     </div>
     {{/each}}
