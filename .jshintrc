@@ -2,6 +2,7 @@
   "predef": [
     "URL",
     "IRCProtocol",
+    "sinon",
     "document",
     "window",
     "location",
