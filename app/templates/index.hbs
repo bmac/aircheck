@@ -1,3 +1,6 @@
-<label for="roomName">Enter room name:</label>
-{{input type="text" name="roomName" value=roomName action="goToRoom"}}
+<h1>Welcome to Aircheck</h1>
+<p>Aircheck makes it easy to start a chat room using <a href="http://www.webrtc.org/">WebRTC</a> technology. Aircheck records your audio as you chat. When you are done you can use Aircheck to save and share this audio. This can be useful for creating podcasts because aircheck makes it easy to record the audio at the source.</p>
+<label for="roomName">To begin please enter a room name:</label>
+{{input type="text" class="room-name" value=roomName action="goToRoom"}}
+<button class="join" {{action 'goToRoom' message}}>Join Room</button>
 
