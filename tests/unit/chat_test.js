@@ -34,7 +34,7 @@ test('join room should return a user promise that fulfills with a ', 6, function
     var roomPromise = chat.joinRoom(nick, roomName);
     roomPromise.then(function(room) {
         start();
-        equal(room.name, roomName, 'room object should have a name');        
+        ok(room.name, 'room object should have a name');
         equal(room.user.nick, nick, 'room.user object should have a nick');
         equal(room.user.stream, stream, 'room.user object should have a stream');
         equal(room.user.videoSrc, videoSrc, 'room.user object should have a videoSrc');

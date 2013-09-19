@@ -39,6 +39,14 @@ test('Room#send', 2, function() {
     ok(/foo/.test(arg), 'should send foo in the message');
 });
 
+test('Room#setNick', 2, function() {
+    room.setNick('new nick');
+    equal(room.messages.length, 1);
+    var arg = openDataChannel.send.getCall(0).args[0];
+
+    equal(':user_nick@room_name NICK new_nick', arg);
+});
+
 test('Room#_sendIrcMsg', 2, function() {
     var ircMsg = {
         prefix: {
@@ -72,8 +80,8 @@ test('Room#_sendIrcMsg w socketId arg', 1, function() {
 test('Room#_prefix', 3, function() {
     rtc._me = 'user socketId';
     var prefix = room._prefix();
-    equal(prefix.nick, 'user nick');
-    equal(prefix.server, 'room name');
+    equal(prefix.nick, 'user_nick');
+    equal(prefix.server, 'room_name');
     equal(prefix.user, 'user socketId');
     rtc._me = null;
 });
@@ -93,6 +101,23 @@ test('Room#_parseUserMsg', 1, function() {
     equal(peer.nick, 'imports');
 });
 
+test('Room#_parseNickMsg', 1, function() {
+    var peer = {
+        socketId: 'peer1'
+    };
+    room.peers.pushObject(peer);
+    room._parseNickMsg({
+        prefix: {
+            user: 'peer1',
+            nick: 'imports'
+        },
+        parameters: ['bb&b']
+    });
+
+    equal(peer.nick, 'bb&b');
+});
+
+
 test('Room#_parsePrivMsg', 5, function() {
     var ircMsg = {
         prefix: {
@@ -101,7 +126,7 @@ test('Room#_parsePrivMsg', 5, function() {
             user: 'user'
         },
         command: 'PRIVMSG',
-        parameters: ['room name', 'I am a message']
+        parameters: ['room_name', 'I am a message']
     };
     room._parsePrivMsg(ircMsg);
     equal(room.messages.length, 1);
@@ -146,5 +171,11 @@ test('rtc "data stream data" event PRIVMSG msg', 1, function() {
     this.stub(room, '_parsePrivMsg');
     rtc.fire('data stream data', {}, ':Darth_Lobster!5d373249-6cd5-7d1f-ce40-ba6409bb3212@asdf PRIVMSG asdf asfd');
     ok(room._parsePrivMsg.called, '_parsePrivMsg was not called');
+});
+
+test('rtc "data stream data" event NICK msg', 1, function() {
+    this.stub(room, '_parseNickMsg');
+    rtc.fire('data stream data', {}, ':user_nick@asdf NICK new_nick');
+    ok(room._parseNickMsg.called, '_parseNickMsg was not called');
 });
 

@@ -10,14 +10,13 @@ var rtc = window.rtc;
 
 // This should return a promise
 var joinRoom = function(nick, roomName) {
-    var validNick = nick.replace(/\s+/g, '_');
     rtc.connect(config.signalServer, roomName);
 
     return createStream().then(function(streamObject) {
         var room = new Room({
             name: roomName,
             user: {
-                nick: validNick,
+                nick: nick,
                 videoSrc: streamObject.videoSrc,
                 stream: streamObject.stream
             }

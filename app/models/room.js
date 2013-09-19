@@ -28,6 +28,8 @@ var Room = function(config) {
     this.user = {};
     this.name = '';
     Ember.merge(this, config);
+    this.name = Room._sanitizeName(this.name);
+    this.user.nick = Room._sanitizeName(this.user.nick);
     this._setupEvents();
 };
 
@@ -42,13 +44,32 @@ Room.prototype.send = function(msg) {
         parameters: [this.name, msg]
     };
     // send the message to all peers
-    this._sendIrcMsg(ircMsg); 
+    this._sendIrcMsg(ircMsg);
     // store the message locally
     this.messages.pushObject({
         nick: ircMsg.prefix.nick,
         msg: ircMsg.parameters[1],
         time: Date.now(),
         type: 'msg'
+    });
+};
+
+Room.prototype.setNick = function(nick) {
+    nick = Room._sanitizeName(nick);
+    var ircMsg = {
+        prefix: this._prefix(),
+        command: 'NICK',
+        parameters: [nick]
+    };
+    // send the message to all peers
+    this._sendIrcMsg(ircMsg);
+    this.user.nick = nick;
+    // store the message locally
+    this.messages.pushObject({
+        nick: ircMsg.prefix.nick,
+        msg: [ircMsg.prefix.nick, 'is now known as', ircMsg.parameters[0]].join(' '),
+        time: Date.now(),
+        type: 'nick'
     });
 };
 
@@ -61,7 +82,7 @@ Room.prototype._sendIrcMsg = function(ircMsg, socketId) {
     if (socketId) {
         channels = [rtc.dataChannels[socketId]];
     } else {
-        // Currently we only support 1 room so rtc.dataChannels should only 
+        // Currently we only support 1 room so rtc.dataChannels should only
         // contain users from our room
         channels = Object.keys(rtc.dataChannels).map(function(key) {
             return rtc.dataChannels[key];
@@ -87,6 +108,19 @@ Room.prototype._parseUserMsg = function(ircMsg) {
         return remote.socketId === ircMsg.prefix.user;
     });
     Ember.set(remoteUser, 'nick', ircMsg.prefix.nick);
+};
+
+Room.prototype._parseNickMsg = function(ircMsg) {
+    var remoteUser = this.peers.find(function(remote) {
+        return remote.socketId === ircMsg.prefix.user;
+    });
+    this.messages.pushObject({
+        nick: ircMsg.prefix.nick,
+        msg: [ircMsg.prefix.nick, 'is now known as', ircMsg.parameters[0]].join(' '),
+        time: Date.now(),
+        type: 'nick'
+    });
+    Ember.set(remoteUser, 'nick', ircMsg.parameters[0]);
 };
 
 Room.prototype._parsePrivMsg = function(ircMsg) {
@@ -128,13 +162,19 @@ Room.prototype._setupEvents = function() {
             // respont to WHOIS
 
             // respond to NICK
-
+        case 'NICK':
+            room._parseNickMsg(ircMsg);
+            break;
             // respond to USER
         case 'USER':
             room._parseUserMsg(ircMsg);
             break;
         }
     });
+};
+
+Room._sanitizeName = function(nick) {
+    return nick.replace(/\s+/g, '_');
 };
 
 export default Room;
