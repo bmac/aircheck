@@ -43,8 +43,11 @@ test('Room#setNick', 2, function() {
     room.setNick('new nick');
     equal(room.messages.length, 1);
     var arg = openDataChannel.send.getCall(0).args[0];
-
-    equal(':user_nick@room_name NICK new_nick', arg);
+    console.log(arg);
+    //:user_nick@room_name NICK new_nick
+    // or
+    //:user_nick asdfe-asdfda-asdfasd-32f32f@room_name NICK new_nick
+    ok(/:user_nick[^@]*@room_name NICK new_nick/.test(arg));
 });
 
 test('Room#_sendIrcMsg', 2, function() {
