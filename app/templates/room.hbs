@@ -20,9 +20,9 @@
     <video {{bindAttr src=user.videoSrc }} autoplay id="video"></video>
 </section>
 <section class="messages">
-{{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
-<button class="send" {{action 'sendMessage' message}}>Send</button>
-{{#each messages}}
+    {{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
+    <button class="send" {{action 'sendMessage' message}}>Send</button>
+    {{#each messages}}
     <div >
         {{ time }} &lt;{{nick}}&gt; {{msg}}
     </div>

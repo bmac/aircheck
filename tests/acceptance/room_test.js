@@ -38,8 +38,6 @@ test('clicking send should send a message', 1, function(){
     });
 });
 
-
-
 test('the user should be able to change their nick', 1, function(){
     var setNick = this.spy();
     this.stub(chat, 'joinRoom', function() {
