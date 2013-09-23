@@ -1,4 +1,4 @@
-import chat from 'aircheck/helpers/chat';
+import chat from 'aircheck/services/chat';
 
 
 Ember.RSVP.configure('onerror', function(e) {

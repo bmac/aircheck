@@ -1,5 +1,5 @@
-import chat from 'aircheck/helpers/chat';
-import nameGen from 'aircheck/helpers/nameGen';
+import chat from 'aircheck/services/chat';
+import nameGen from 'aircheck/services/nameGen';
 
 var RoomRoute = Ember.Route.extend({
     model: function(params) {

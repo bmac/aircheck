@@ -1,5 +1,5 @@
 import App from 'aircheck/app';
-import chat from 'aircheck/helpers/chat';
+import chat from 'aircheck/services/chat';
 
 module('Acceptances - Room', {
     setup: function(){
