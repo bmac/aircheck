@@ -37,3 +37,24 @@ test('clicking send should send a message', 1, function(){
         ok(send.called);
     });
 });
+
+
+
+test('the user should be able to change their nick', 1, function(){
+    var setNick = this.spy();
+    this.stub(chat, 'joinRoom', function() {
+        return Ember.RSVP.resolve({
+            peers: [],
+            setNick: setNick
+        });
+    });
+
+    visit('/room/asdf').
+    click('.nick').
+    fillIn('.new-nick', 'new nick name').
+    keyEvent('.new-nick', 'keyup', 13). // 13 === enter
+    then(function() {
+      ok(setNick.called);
+    });
+
+});

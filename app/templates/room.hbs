@@ -1,10 +1,10 @@
 <h1>Room: {{ name }}</h1>
 {{#if editNick}}
-<h1>Nick: </h1>
+<h1 class="nick" {{action 'toggleEditNick'}} >Nick: </h1>
 {{input type="text" value=newNick class="new-nick" action="saveNick" onEvent="enter" }}
 <button class="send" {{action 'saveNick' newNick}}>Send</button>
 {{else}}
-<h1 {{action 'toggleEditNick' newNick}} > Nick: {{ user.nick }}</h1>
+<h1 class="nick" {{action 'toggleEditNick'}} > Nick: {{ user.nick }}</h1>
 {{/if}}
 <section class="others clearfix">
     <div>Other Videos: {{ peers.length }}</div>

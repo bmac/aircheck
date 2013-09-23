@@ -7,13 +7,16 @@ var RoomController = Ember.ObjectController.extend({
             this.set('message', '');
         },
         toggleEditNick: function() {
+            this.set('newNick', this.get('model.user.nick'));
             this.toggleProperty('editNick');
-            console.log('editNick', this.get('editNick'));
+            // bad?
+            Ember.run.next(this, function() {
+                $('.new-nick').select();
+            });
         },
         saveNick: function(newNick) {
             var room = this.get('model');
             room.setNick(newNick);
-            this.set('newNick', '');
             this.set('editNick', false);
         }
     },
