@@ -1,4 +1,3 @@
-
 var RoomController = Ember.ObjectController.extend({
     actions: {
         sendMessage: function(msg) {
@@ -9,10 +8,6 @@ var RoomController = Ember.ObjectController.extend({
         toggleEditNick: function() {
             this.set('newNick', this.get('model.user.nick'));
             this.toggleProperty('editNick');
-            // bad?
-            Ember.run.next(this, function() {
-                $('.new-nick').select();
-            });
         },
         saveNick: function(newNick) {
             var room = this.get('model');
