@@ -27,7 +27,7 @@ Ember.Handlebars.registerHelper('selectInput', function(options) {
 
   normalizeHash(hash, types);
 
-  if (inputType) { hash.type = inputType; }
+  hash.type = inputType;
   hash.onEvent = onEvent || 'enter';
   return Ember.Handlebars.helpers.view.call(this, SelectInputView, options);
 });
