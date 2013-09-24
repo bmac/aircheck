@@ -1,12 +1,13 @@
-import App from 'aircheck/app';
 import chat from 'aircheck/services/chat';
+var App;
 
 module('Acceptances - Room', {
     setup: function(){
-        App.reset();
+        App = startApp();
+        //App.reset();
     },
     teardown: function() {
-        App.reset();
+        Ember.run(App, 'destroy');
     }
 });
 

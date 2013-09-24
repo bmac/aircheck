@@ -2,7 +2,7 @@ import Resolver from 'resolver';
 import router from 'aircheck/router';
 
 
-var App = Ember.Application.create({
+var App = Ember.Application.extend({
   LOG_ACTIVE_GENERATION: true,
   LOG_VIEW_LOOKUPS: true,
   modulePrefix: 'aircheck', // TODO: loaded via config
@@ -11,6 +11,5 @@ var App = Ember.Application.create({
     router: router
   })
 });
-
 
 export default App;

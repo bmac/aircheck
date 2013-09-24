@@ -11,4 +11,4 @@ module.exports = {
     "build:styles", 
     "build:other"
   ]
-}
+};

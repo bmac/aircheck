@@ -29,21 +29,35 @@ module.exports = function(grunt) {
   // `public/assets/app.css` and create `app/styles/app.scss` instead.
 
   var Helpers = require('./tasks/helpers'),
-      config = Helpers.defaultConfig,
-      whenAvailable = Helpers.whenTaskIsAvailable,
+      config = Helpers.config,
+      filterAvailable = Helpers.filterAvailableTasks,
       _ = grunt.util._;
 
   config = _.extend(config, Helpers.loadConfig('./tasks/options/'));
 
-  grunt.initConfig(config);
 
   require('load-grunt-tasks')(grunt);
   grunt.loadTasks('tasks');
 
   grunt.registerTask('default', "Build (in debug mode) & test your application.", ['test']);
 
+  config.concurrent = {
+    dist: [
+      "build:templates:dist",
+      "build:scripts",
+      "build:styles",
+      "build:other"
+    ],
+    debug: [
+      "build:templates:debug",
+      "build:scripts",
+      "build:styles",
+      "build:other"
+    ]
+  };
+
   // All tasks except build:before and build:after are run concurrently
-  grunt.registerTask('build:before', [
+  grunt.registerTask('build:before:dist', [
                      'clean:build',
                      'clean:release',
                      'lock'
@@ -54,40 +68,37 @@ module.exports = function(grunt) {
                      'lock'
                      ]);
 
-  grunt.registerTask('build:templates', _.compact([
-                     whenAvailable('emblem:compile'),
-                     whenAvailable('emberTemplates:dist')
+  grunt.registerTask('build:templates:dist', filterAvailable([
+                     'emblem:compile',
+                     'emberTemplates:dist'
                      ]));
 
-  grunt.registerTask('build:templates:debug', _.compact([
-                     whenAvailable('emblem:compile'),
-                     whenAvailable('emberTemplates:debug')
+  grunt.registerTask('build:templates:debug', filterAvailable([
+                     'emblem:compile',
+                     'emberTemplates:debug'
                      ]));
 
-  grunt.registerTask('build:scripts', _.compact([
-                     whenAvailable('coffee'),
+  grunt.registerTask('build:scripts', filterAvailable([
+                     'coffee',
                      'copy:prepare',
                      'transpile',
                      'jshint',
-                     'copy:stage',
                      'concat_sourcemap'
                      ]));
 
-  grunt.registerTask('build:styles', _.compact([
-                     whenAvailable('compass:compile'),
-                     whenAvailable('sass:compile'),
-                     whenAvailable('less:compile'),
-                     whenAvailable('stylus:compile'),
-                     'cssmin',
-                     'concat_sourcemap',
-                     'unlock'
+  grunt.registerTask('build:styles', filterAvailable([
+                     'compass:compile',
+                     'sass:compile',
+                     'less:compile',
+                     'stylus:compile',
+                     'cssmin'
                      ]));
 
-  grunt.registerTask('build:other', _.compact([
+  grunt.registerTask('build:other', filterAvailable([
                      'copy:vendor'
                      ]));
 
-  grunt.registerTask('build:after', _.compact([
+  grunt.registerTask('build:after:dist', filterAvailable([
                      'copy:stage',
                      'unlock',
                      'dom_munger:distEmber',
@@ -100,15 +111,15 @@ module.exports = function(grunt) {
                      'usemin'
                      ]));
 
-  grunt.registerTask('build:after:debug', _.compact([
+  grunt.registerTask('build:after:debug', filterAvailable([
                      'copy:stage',
                      'unlock' 
                      ]));
 
   grunt.registerTask('build:dist', "Build a minified & production-ready version of your app.", [
-                     'build:before',
+                     'build:before:dist',
                      'concurrent:dist',
-                     'build:after'
+                     'build:after:dist'
                      ]);
 
   grunt.registerTask('build:debug', "Build a development-friendly version of your app.", [
@@ -133,4 +144,7 @@ module.exports = function(grunt) {
                      ['build:debug', 'connect:server', 'watch:main']);
   grunt.registerTask('server:dist', "Build and preview production (minified) assets.",
                      ['build:dist', 'connect:dist:keepalive']);
+
+
+  grunt.initConfig(config);
 };

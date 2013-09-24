@@ -13,13 +13,15 @@ module.exports = function(config) {
       'vendor/libs/irc-protocol.js',
       'vendor/sinonjs/sinon.js',
       'vendor/loader.js',
+      'vendor/almond.js',
+      'vendor/resolver.js',
       'vendor/jquery/jquery.js',
       'vendor/handlebars/handlebars.js',
       'vendor/ember/index.js',
       'assets/templates.js',
       'assets/app.js',
-      'tests/test_helper.js',
       'tests/tests.js',
+      'tests/test_helper.js',
       'tests/test_loader.js'
     ],
 

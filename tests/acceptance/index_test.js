@@ -1,9 +1,12 @@
-import Index from 'aircheck/routes/index';
-import App from 'aircheck/app';
+var App;
 
 module("Acceptances - Index", {
   setup: function(){
-    App.reset();
+    App = startApp();
+    //App.reset();
+  },
+  teardown: function() {
+      Ember.run(App, 'destroy');
   }
 });
 
