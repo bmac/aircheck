@@ -2,6 +2,7 @@ import Room from 'aircheck/models/room';
 
 var rtc = window.rtc;
 var room, openDataChannel, closedDataChannel;
+var AudioContext = window.AudioContext || window.webkitAudioContext;
 module("Unit - Model - Room", {
     setup: function() {
         room = new Room({
@@ -22,12 +23,18 @@ module("Unit - Model - Room", {
         };
         rtc.dataChannels['open'] = openDataChannel;
         rtc.dataChannels['closed'] = closedDataChannel;
-
+        // since we work with stub video sorce objects we need to stub out
+        // createMediaStreamSource so it doesn't blow up when given a stub
+        sinon.stub(AudioContext.prototype, 'createMediaStreamSource', function() {
+            var context = new AudioContext();
+            return context.createMediaElementSource(new Audio());
+        });
     },
     teardown: function() {
         rtc.dataChannels['open'] = null;
         rtc.dataChannels['closed'] = null;
         rtc._events = {};
+        AudioContext.prototype.createMediaStreamSource.restore();
     }
 });
 

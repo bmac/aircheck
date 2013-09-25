@@ -13,6 +13,11 @@ var RoomController = Ember.ObjectController.extend({
             var room = this.get('model');
             room.setNick(newNick);
             this.set('editNick', false);
+        },
+        downloadAudio: function() {
+            this.get('model').exportWAV().then(function(blob) {
+                Recorder.forceDownload(blob);
+            });
         }
     },
     editNick: false,

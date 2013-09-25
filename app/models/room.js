@@ -31,6 +31,7 @@ var Room = function(config) {
     this.name = Room._sanitizeName(this.name);
     this.user.nick = Room._sanitizeName(this.user.nick);
     this._setupEvents();
+    this._setupRecorder();
 };
 
 /*
@@ -71,6 +72,16 @@ Room.prototype.setNick = function(nick) {
         time: Date.now(),
         type: 'nick'
     });
+};
+
+Room.prototype.exportWAV = function() {
+    var room = this;
+    var promise = new Ember.RSVP.Promise(function(resolve, reject) {
+        room._rec.exportWAV(function(blob) {
+            resolve(blob);
+        });
+    });
+    return promise;
 };
 
 /*
@@ -127,6 +138,14 @@ Room.prototype._parsePrivMsg = function(ircMsg) {
     //if (ircMsg.parameters[0] === this.name) {
     this.messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now(), type: 'msg'});
     //}
+};
+
+Room.prototype._setupRecorder = function() {
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    var context = new AudioContext();
+    var mediaSourceNode = context.createMediaStreamSource(this.user.stream);
+    this._rec = new Recorder(mediaSourceNode, {workerPath: '/vendor/libs/recorderWorker.js'});
+    this._rec.record();
 };
 
 Room.prototype._setupEvents = function() {

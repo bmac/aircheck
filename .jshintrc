@@ -1,5 +1,6 @@
 {
   "predef": [
+    "Recorder",
     "URL",
     "IRCProtocol",
     "sinon",
@@ -42,7 +43,7 @@
   "browser" : false,
   "boss" : true,
   "curly": false,
-  "debug": false,
+  "debug": true,
   "devel": false,
   "eqeqeq": true,
   "evil": true,
