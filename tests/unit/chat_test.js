@@ -1,4 +1,6 @@
+import Room from 'aircheck/models/room';
 import chat from 'aircheck/services/chat';
+
 
 
 Ember.RSVP.configure('onerror', function(e) {
@@ -22,13 +24,14 @@ module("Unit - chat", {
 
 var rtc = window.rtc;
 
-test('join room should return a user promise that fulfills with a ', 6, function() {
+test('join room should return a user promise that fulfills with a room object', 6, function() {
     var stream = this.stub(), videoSrc = this.stub();
     this.stub(rtc, "connect");
     this.stub(rtc, "createStream", function(config, cb) {
         cb(stream);
     });
     this.stub(URL, 'createObjectURL').returns(videoSrc);
+    sinon.stub(Room.prototype, '_setupRecorder');
     var nick = 'nick', roomName = 'my room';
 
     var roomPromise = chat.joinRoom(nick, roomName);
@@ -40,6 +43,7 @@ test('join room should return a user promise that fulfills with a ', 6, function
         equal(room.user.videoSrc, videoSrc, 'room.user object should have a videoSrc');
         deepEqual(room.messages, []);
         deepEqual(room.peers, []);
+        Room.prototype._setupRecorder.restore();
     });
     stop();
 });

@@ -5,6 +5,10 @@ var room, openDataChannel, closedDataChannel;
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 module("Unit - Model - Room", {
     setup: function() {
+        // since we work with stub video sorce objects we need to stub out
+        // createMediaStreamSource so it doesn't blow up when given a stub
+        sinon.stub(Room.prototype, '_setupRecorder');
+
         room = new Room({
             name: 'room name',
             user: {
@@ -23,18 +27,12 @@ module("Unit - Model - Room", {
         };
         rtc.dataChannels['open'] = openDataChannel;
         rtc.dataChannels['closed'] = closedDataChannel;
-        // since we work with stub video sorce objects we need to stub out
-        // createMediaStreamSource so it doesn't blow up when given a stub
-        sinon.stub(AudioContext.prototype, 'createMediaStreamSource', function() {
-            var context = new AudioContext();
-            return context.createMediaElementSource(new Audio());
-        });
     },
     teardown: function() {
         rtc.dataChannels['open'] = null;
         rtc.dataChannels['closed'] = null;
         rtc._events = {};
-        AudioContext.prototype.createMediaStreamSource.restore();
+        Room.prototype._setupRecorder.restore();
     }
 });
 
@@ -170,7 +168,7 @@ test('rtc "disconnect stream" event', 1, function() {
     equal(room.peers.length, 0);
 });
 
-test('rtc "data stream data" event USER msg', 1, function() {    
+test('rtc "data stream data" event USER msg', 1, function() {
     this.stub(room, '_parseUserMsg', function(){});
     rtc.fire('data stream data', {}, ':Captain_Penguin!52f81e4f-22d9-dced-e463-a5fa58cd4b44@asdf USER ');
     ok(room._parseUserMsg.called, '_parseUserMsg was not called');
@@ -187,4 +185,3 @@ test('rtc "data stream data" event NICK msg', 1, function() {
     rtc.fire('data stream data', {}, ':user_nick@asdf NICK new_nick');
     ok(room._parseNickMsg.called, '_parseNickMsg was not called');
 });
-
