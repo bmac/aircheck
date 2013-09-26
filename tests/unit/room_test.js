@@ -5,8 +5,6 @@ var room, openDataChannel, closedDataChannel;
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 module("Unit - Model - Room", {
     setup: function() {
-        // since we work with stub video sorce objects we need to stub out
-        // createMediaStreamSource so it doesn't blow up when given a stub
         sinon.stub(Room.prototype, '_setupRecorder');
 
         room = new Room({
@@ -142,6 +140,50 @@ test('Room#_parsePrivMsg', 5, function() {
     equal(room.messages[0].type, 'msg');
     ok(room.messages[0].time);
 });
+
+
+test('Room#_setupRecorder', 3, function() {
+    // TODO this is an ugly test. Look at moving this logic out of the room model
+    room._setupRecorder.restore();
+    var mediaStream = 'mediaStream';
+    var recorderObject = {
+        record: this.spy()
+    };
+    this.stub(AudioContext.prototype, 'createMediaStreamSource').returns(mediaStream);
+    this.stub(window, 'Recorder').returns(recorderObject);
+
+    var room2 = new Room({
+        name: 'room name',
+        user: {
+            nick: 'user nick',
+            videoSrc: 'videoSrc',
+            stream: 'stream'
+        }
+    });
+    ok(AudioContext.prototype.createMediaStreamSource.calledWith('stream'));
+    ok(window.Recorder.calledWith(mediaStream));
+    ok(recorderObject.record.called);
+    sinon.stub(Room.prototype, '_setupRecorder');
+});
+
+test('Room#exportWAV', 1, function() {
+    // TODO this is an ugly test. Look at moving this logic out of the room model
+    var blob = 'blob';
+    room._rec = {
+        exportWAV: function(cb) {
+            cb(blob);
+        }
+    };
+
+    stop();
+    Ember.run(function() {
+        room.exportWAV().then(function(b) {
+            start();
+            equal(b, blob);
+        });
+    });
+});
+
 
 test('rtc "add remote stream" event', 3, function() {
     var stream = this.stub(), socketId = 'socketId';

@@ -11,6 +11,7 @@ module.exports = function(config) {
     files: [
       'vendor/libs/webrtc.io.js',
       'vendor/libs/irc-protocol.js',
+      'vendor/libs/recorder.js',
       'vendor/sinonjs/sinon.js',
       'vendor/loader.js',
       'vendor/almond.js',

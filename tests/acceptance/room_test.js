@@ -57,3 +57,27 @@ test('the user should be able to change their nick', 1, function(){
     });
 
 });
+
+
+test('the user should be able to download their audio', 1, function(){
+    sinon.stub(Recorder, 'forceDownload');
+    var setNick = this.spy();
+    this.stub(chat, 'joinRoom', function() {
+        return Ember.RSVP.resolve({
+            peers: [],
+            setNick: setNick,
+            exportWAV: function() {
+                console.log('exportWAV');
+                return Ember.RSVP.resolve('blob');
+            }
+        });
+    });
+
+    visit('/room/asdf').
+    click('.download-audio').
+    then(function() {
+        ok(Recorder.forceDownload.called, 'forceDownload was called');
+        Recorder.forceDownload.restore();
+    });
+
+});

@@ -6,7 +6,7 @@
 {{else}}
 <h1 class="nick" {{action 'toggleEditNick'}} > Nick: {{ user.nick }}</h1>
 {{/if}}
-<a href="#" {{action 'downloadAudio'}}>Download Audio</a>
+<a href="#" class="download-audio" {{action 'downloadAudio'}}>Download Audio</a>
 <section class="others clearfix">
     <div>Other Videos: {{ peers.length }}</div>
     {{#each peers}}

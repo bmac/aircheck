@@ -1,6 +1,7 @@
 {
   "predef": [
     "Audio",
+    "Recorder",
     "URL",
     "sinon",
     "document",
