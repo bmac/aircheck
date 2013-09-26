@@ -1,3 +1,5 @@
+import Recording from 'aircheck/services/recording';
+
 var RoomController = Ember.ObjectController.extend({
     actions: {
         sendMessage: function(msg) {
@@ -15,9 +17,7 @@ var RoomController = Ember.ObjectController.extend({
             this.set('editNick', false);
         },
         downloadAudio: function() {
-            this.get('model').exportWAV().then(function(blob) {
-                Recorder.forceDownload(blob);
-            });
+            Recording.downloadWAV(this.get('model').recording);
         }
     },
     editNick: false,

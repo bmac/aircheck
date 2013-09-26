@@ -1,3 +1,5 @@
+import Recording from 'aircheck/services/recording';
+
 var rtc = window.rtc;
 var parser = new IRCProtocol.Parser();
 var serialiser = new IRCProtocol.Serialiser();
@@ -74,16 +76,6 @@ Room.prototype.setNick = function(nick) {
     });
 };
 
-Room.prototype.exportWAV = function() {
-    var room = this;
-    var promise = new Ember.RSVP.Promise(function(resolve, reject) {
-        room._rec.exportWAV(function(blob) {
-            resolve(blob);
-        });
-    });
-    return promise;
-};
-
 /*
  * Priavte API
  */
@@ -141,11 +133,7 @@ Room.prototype._parsePrivMsg = function(ircMsg) {
 };
 
 Room.prototype._setupRecorder = function() {
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
-    var context = new AudioContext();
-    var mediaSourceNode = context.createMediaStreamSource(this.user.stream);
-    this._rec = new Recorder(mediaSourceNode, {workerPath: '/vendor/libs/recorderWorker.js'});
-    this._rec.record();
+    this.recording = new Recording(this.user.stream);
 };
 
 Room.prototype._setupEvents = function() {

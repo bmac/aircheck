@@ -166,25 +166,6 @@ test('Room#_setupRecorder', 3, function() {
     sinon.stub(Room.prototype, '_setupRecorder');
 });
 
-test('Room#exportWAV', 1, function() {
-    // TODO this is an ugly test. Look at moving this logic out of the room model
-    var blob = 'blob';
-    room._rec = {
-        exportWAV: function(cb) {
-            cb(blob);
-        }
-    };
-
-    stop();
-    Ember.run(function() {
-        room.exportWAV().then(function(b) {
-            start();
-            equal(b, blob);
-        });
-    });
-});
-
-
 test('rtc "add remote stream" event', 3, function() {
     var stream = this.stub(), socketId = 'socketId';
     this.stub(URL, 'createObjectURL');
