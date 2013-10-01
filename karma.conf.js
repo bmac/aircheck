@@ -21,7 +21,8 @@ module.exports = function(config) {
       'vendor/ember/index.js',
       'assets/templates.js',
       'assets/app.js',
-      'tests/tests.js',
+      //'tests/tests.js',
+      '../transpiled/tests/**/*.js',
       'tests/test_helper.js',
       'tests/test_loader.js'
     ],
