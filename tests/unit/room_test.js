@@ -1,11 +1,12 @@
 import Room from 'aircheck/models/room';
+import Recording from 'aircheck/services/recording';
 
 var rtc = window.rtc;
 var room, openDataChannel, closedDataChannel;
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 module("Unit - Model - Room", {
     setup: function() {
-        sinon.stub(Room.prototype, '_setupRecorder');
+        sinon.stub(Recording, 'create');
 
         room = new Room({
             name: 'room name',
@@ -30,7 +31,7 @@ module("Unit - Model - Room", {
         rtc.dataChannels['open'] = null;
         rtc.dataChannels['closed'] = null;
         rtc._events = {};
-        Room.prototype._setupRecorder.restore();
+        Recording.create.restore();
     }
 });
 
@@ -139,31 +140,6 @@ test('Room#_parsePrivMsg', 5, function() {
     equal(room.messages[0].nick, 'nick');
     equal(room.messages[0].type, 'msg');
     ok(room.messages[0].time);
-});
-
-
-test('Room#_setupRecorder', 3, function() {
-    // TODO this is an ugly test. Look at moving this logic out of the room model
-    room._setupRecorder.restore();
-    var mediaStream = 'mediaStream';
-    var recorderObject = {
-        record: this.spy()
-    };
-    this.stub(AudioContext.prototype, 'createMediaStreamSource').returns(mediaStream);
-    this.stub(window, 'Recorder').returns(recorderObject);
-
-    var room2 = new Room({
-        name: 'room name',
-        user: {
-            nick: 'user nick',
-            videoSrc: 'videoSrc',
-            stream: 'stream'
-        }
-    });
-    ok(AudioContext.prototype.createMediaStreamSource.calledWith('stream'));
-    ok(window.Recorder.calledWith(mediaStream));
-    ok(recorderObject.record.called);
-    sinon.stub(Room.prototype, '_setupRecorder');
 });
 
 test('rtc "add remote stream" event', 3, function() {

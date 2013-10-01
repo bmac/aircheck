@@ -32,8 +32,8 @@ var Room = function(config) {
     Ember.merge(this, config);
     this.name = Room._sanitizeName(this.name);
     this.user.nick = Room._sanitizeName(this.user.nick);
+    this.recording = Recording.create(this.user.stream);
     this._setupEvents();
-    this._setupRecorder();
 };
 
 /*
@@ -130,10 +130,6 @@ Room.prototype._parsePrivMsg = function(ircMsg) {
     //if (ircMsg.parameters[0] === this.name) {
     this.messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now(), type: 'msg'});
     //}
-};
-
-Room.prototype._setupRecorder = function() {
-    this.recording = new Recording(this.user.stream);
 };
 
 Room.prototype._setupEvents = function() {

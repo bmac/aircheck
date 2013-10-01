@@ -1,5 +1,6 @@
-import Room from 'aircheck/models/room';
+import Recording from 'aircheck/services/recording';
 import chat from 'aircheck/services/chat';
+
 
 
 
@@ -31,7 +32,7 @@ test('join room should return a user promise that fulfills with a room object', 
         cb(stream);
     });
     this.stub(URL, 'createObjectURL').returns(videoSrc);
-    sinon.stub(Room.prototype, '_setupRecorder');
+    sinon.stub(Recording, 'create');
     var nick = 'nick', roomName = 'my room';
 
     var roomPromise = chat.joinRoom(nick, roomName);
@@ -43,34 +44,7 @@ test('join room should return a user promise that fulfills with a room object', 
         equal(room.user.videoSrc, videoSrc, 'room.user object should have a videoSrc');
         deepEqual(room.messages, []);
         deepEqual(room.peers, []);
-        Room.prototype._setupRecorder.restore();
+        Recording.create.restore();
     });
     stop();
 });
-
-// test('remote user added', 1, function() {
-//     var stream = {},
-//         socketId = '12345',
-//         videoSrc = 'videoSrc';
-//     this.stub(URL, 'createObjectURL').returns(videoSrc);
-
-//     rtc.fire('add remote stream', stream, socketId);
-//     deepEqual(chat._remotes[0], {
-//         stream: stream,
-//         socketId: socketId,
-//         videoSrc: videoSrc
-//     });
-// });
-
-// test('remote user left', 2, function() {
-//     var stream = {},
-//         socketId = '12345';
-
-//     chat._remotes.push({
-//         socketId: socketId
-//     });
-
-//     equal(chat._remotes.length, 1);
-//     rtc.fire('disconnect stream', socketId);
-//     equal(chat._remotes.length, 0);
-// });
