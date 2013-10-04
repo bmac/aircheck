@@ -1,9 +1,6 @@
 import Recording from 'aircheck/services/recording';
 
 var rtc = window.rtc;
-var parser = new IRCProtocol.Parser();
-var serialiser = new IRCProtocol.Serialiser();
-
 /*
 // The structure of a room object
 var room = {
@@ -30,8 +27,6 @@ var Room = function(config) {
     this.user = {};
     this.name = '';
     Ember.merge(this, config);
-    this.name = Room._sanitizeName(this.name);
-    this.user.nick = Room._sanitizeName(this.user.nick);
     this.recording = Recording.create(this.user.stream);
     this._setupEvents();
 };
@@ -41,44 +36,32 @@ var Room = function(config) {
  */
 
 Room.prototype.send = function(msg) {
-    var ircMsg = {
-        prefix: this._prefix(),
-        command: 'PRIVMSG',
-        parameters: [this.name, msg]
-    };
+    var ircMsg = this._createIrcMsg(msg);
     // send the message to all peers
     this._sendIrcMsg(ircMsg);
-    // store the message locally
-    this.messages.pushObject({
-        nick: ircMsg.prefix.nick,
-        msg: ircMsg.parameters[1],
-        time: Date.now(),
-        type: 'msg'
-    });
 };
 
-Room.prototype.setNick = function(nick) {
-    nick = Room._sanitizeName(nick);
-    var ircMsg = {
-        prefix: this._prefix(),
-        command: 'NICK',
-        parameters: [nick]
-    };
+Room.prototype.setNick = function(newNick) {
+    var oldNick = this.user.nick;
+    this.user.nick = newNick;
+    var msg = [oldNick, 'is now known as', newNick].join(' ');
+    var ircMsg = this._createIrcMsg(msg, 'NICK');
     // send the message to all peers
     this._sendIrcMsg(ircMsg);
-    this.user.nick = nick;
-    // store the message locally
-    this.messages.pushObject({
-        nick: ircMsg.prefix.nick,
-        msg: [ircMsg.prefix.nick, 'is now known as', ircMsg.parameters[0]].join(' '),
-        time: Date.now(),
-        type: 'nick'
-    });
 };
 
 /*
  * Priavte API
  */
+Room.prototype._createIrcMsg = function(msg, type) {
+    return {
+        nick: this.user.nick,
+        msg: msg,
+        time: Date.now(),
+        type: type || 'MSG',
+        userId: rtc._me
+    };
+};
 
 Room.prototype._sendIrcMsg = function(ircMsg, socketId) {
     var channels = [];
@@ -94,42 +77,28 @@ Room.prototype._sendIrcMsg = function(ircMsg, socketId) {
     channels.filter(function(channel) {
         return channel.readyState === 'open';
     }).forEach(function(channel) {
-        channel.send(serialiser.format_message(ircMsg));
+        channel.send(JSON.stringify(ircMsg));
     });
-};
-
-Room.prototype._prefix = function() {
-    return {
-        nick: this.user.nick,
-        server: this.name,
-        user: rtc._me
-    };
+    this.messages.pushObject(ircMsg);
 };
 
 Room.prototype._parseUserMsg = function(ircMsg) {
     var remoteUser = this.peers.find(function(remote) {
-        return remote.socketId === ircMsg.prefix.user;
+        return remote.socketId === ircMsg.userId;
     });
-    Ember.set(remoteUser, 'nick', ircMsg.prefix.nick);
+    Ember.set(remoteUser, 'nick', ircMsg.nick);
 };
 
 Room.prototype._parseNickMsg = function(ircMsg) {
     var remoteUser = this.peers.find(function(remote) {
-        return remote.socketId === ircMsg.prefix.user;
+        return remote.socketId === ircMsg.userId;
     });
-    this.messages.pushObject({
-        nick: ircMsg.prefix.nick,
-        msg: [ircMsg.prefix.nick, 'is now known as', ircMsg.parameters[0]].join(' '),
-        time: Date.now(),
-        type: 'nick'
-    });
-    Ember.set(remoteUser, 'nick', ircMsg.parameters[0]);
+    this.messages.pushObject(ircMsg);
+    Ember.set(remoteUser, 'nick', ircMsg.nick);
 };
 
-Room.prototype._parsePrivMsg = function(ircMsg) {
-    //if (ircMsg.parameters[0] === this.name) {
-    this.messages.pushObject({nick: ircMsg.prefix.nick, msg: ircMsg.parameters[1], time: Date.now(), type: 'msg'});
-    //}
+Room.prototype._parseChatMsg = function(ircMsg) {
+    this.messages.pushObject(ircMsg);
 };
 
 Room.prototype._setupEvents = function() {
@@ -144,7 +113,7 @@ Room.prototype._setupEvents = function() {
     });
 
     rtc.on('data stream open', function(stream, socketId) {
-        var ircMsg = {prefix: room._prefix(), command: 'USER', parameters: []};
+        var ircMsg = room._createIrcMsg('', 'USER');
         room._sendIrcMsg(ircMsg, socketId);
     });
 
@@ -157,10 +126,12 @@ Room.prototype._setupEvents = function() {
     });
 
     rtc.on('data stream data', function(data, msg) {
-        var ircMsg = parser.parse(msg);
-        switch (ircMsg.command) {
-        case 'PRIVMSG':
-            room._parsePrivMsg(ircMsg);
+        var ircMsg = JSON.parse(msg);
+        // Is this a good idea?
+        ircMsg.time = Date.now();
+        switch (ircMsg.type) {
+        case 'MSG':
+            room._parseChatMsg(ircMsg);
             break;
             // respont to WHOIS
 
@@ -174,10 +145,6 @@ Room.prototype._setupEvents = function() {
             break;
         }
     });
-};
-
-Room._sanitizeName = function(nick) {
-    return nick.replace(/\s+/g, '_');
 };
 
 export default Room;
