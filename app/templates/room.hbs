@@ -12,20 +12,16 @@
     {{#each peers}}
     <div class="pull-left other-group">
         <label class="other-label">{{ nick }}</label>
-        <video {{bindAttr src=videoSrc }} autoplay class="other"></video>
+        <video {{bindAttr src=videoSrc }} controls class="other"></video>
     </div>
     {{/each}}
     <div class="clearfix"></div>
 </section>
 <section class="user">
-    <video {{bindAttr src=user.videoSrc }} autoplay id="video"></video>
+    <video {{bindAttr src=user.videoSrc }} controls id="video"></video>
 </section>
 <section class="messages">
     {{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
     <button class="send" {{action 'sendMessage' message}}>Send</button>
-    {{#each messages}}
-    <div >
-        {{ time }} &lt;{{nick}}&gt; {{msg}}
-    </div>
-    {{/each}}
+    {{message-pane messages=messages}}
 </section>
