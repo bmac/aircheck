@@ -6,3 +6,36 @@ html, body {
 @keyframes domChanged { from { background: yellow; } }
 @-webkit-keyframes domChanged { from { background: yellow; } }
 .ember-view { animation: domChanged 1s; -webkit-animation: domChanged 1s; }
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.left-rail {
+  flex: 2;
+}
+
+.right-rail {
+  flex: 1;
+}
+
+.peer-row {
+    display: flex;
+}
+
+.peer {
+    flex: 1
+}
+
+.peer-label {
+    width: 90%;
+    display: block;
+    margin: auto;
+}
+
+.peer-video {
+    width: 90%;
+    display: block;
+    margin: auto;
+}

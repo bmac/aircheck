@@ -1,0 +1,12 @@
+<section class="peers">
+    {{#each rows}}
+    <div class="peer-row">
+        {{#each this}}
+        <div class="peer">
+            <video {{bindAttr src=videoSrc }} controls class="peer-video"></video>
+            <label class="peer-label">{{ nick }}</label>
+        </div>
+        {{/each}}
+    </div>
+    {{/each}}
+</section>

@@ -20,7 +20,7 @@ test('room renders', 1, function(){
     });
 
     visit('/room/asdf').then(function(){
-        equal($('.others').text().trim(), 'Other Videos: 0');
+        equal($('.name').text().trim(), 'Room:');
     });
 });
 

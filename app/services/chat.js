@@ -8,6 +8,57 @@ var config = {
 
 var rtc = window.rtc;
 
+var fixture = [
+    {
+        nick: 'foo',
+        socketId: 'some socket id',
+        stream: 'some stream',
+        videoSrc: 'some video src'
+    },
+    {
+        nick: 'bar',
+        socketId: 'some socket id',
+        stream: 'some stream',
+        videoSrc: 'some video src'
+    },
+    {
+        nick: 'baz',
+        socketId: 'some socket id',
+        stream: 'some stream',
+        videoSrc: 'some video src'
+    },
+    {
+        nick: 'foo1',
+        socketId: 'some socket id',
+        stream: 'some stream',
+        videoSrc: 'some video src'
+    },
+    {
+        nick: 'bar1',
+        socketId: 'some socket id',
+        stream: 'some stream',
+        videoSrc: 'some video src'
+    },
+    {
+        nick: 'baz1',
+        socketId: 'some socket id',
+        stream: 'some stream',
+        videoSrc: 'some video src'
+    },
+    {
+        nick: 'bar2',
+        socketId: 'some socket id',
+        stream: 'some stream',
+        videoSrc: 'some video src'
+    },
+    {
+        nick: 'baz2',
+        socketId: 'some socket id',
+        stream: 'some stream',
+        videoSrc: 'some video src'
+    }
+];
+
 // This should return a promise
 var joinRoom = function(nick, roomName) {
     rtc.connect(config.signalServer, roomName);
@@ -21,6 +72,9 @@ var joinRoom = function(nick, roomName) {
                 stream: streamObject.stream
             }
         });
+        // testing code, so I can load video elements without melting my lap
+        //room.peers.pushObjects(fixture);
+
         return room;
     });
 };

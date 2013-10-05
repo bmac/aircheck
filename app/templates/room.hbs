@@ -1,27 +1,24 @@
-<h1>Room: {{ name }}</h1>
-{{#if editNick}}
-<h1 class="nick" {{action 'toggleEditNick'}} >Nick: </h1>
-{{selectInput type="text" value=newNick class="new-nick" action="saveNick" onEvent="enter" }}
-<button class="send" {{action 'saveNick' newNick}}>Send</button>
-{{else}}
-<h1 class="nick" {{action 'toggleEditNick'}} > Nick: {{ user.nick }}</h1>
-{{/if}}
-<a href="#" class="download-audio" {{action 'downloadAudio'}}>Download Audio</a>
-<section class="others clearfix">
-    <div>Other Videos: {{ peers.length }}</div>
-    {{#each peers}}
-    <div class="pull-left other-group">
-        <label class="other-label">{{ nick }}</label>
-        <video {{bindAttr src=videoSrc }} controls class="other"></video>
+<div class="container">
+    <div class="left-rail">
+        <h1 class="name">Room: {{ name }}</h1>
+        {{peer-videos peers=peers}}
     </div>
-    {{/each}}
-    <div class="clearfix"></div>
-</section>
-<section class="user">
-    <video {{bindAttr src=user.videoSrc }} controls id="video"></video>
-</section>
-<section class="messages">
-    {{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
-    <button class="send" {{action 'sendMessage' message}}>Send</button>
-    {{message-pane messages=messages}}
-</section>
+    <div class="right-rail">
+        <section class="user">
+            {{#if editNick}}
+            <h1 class="nick" {{action 'toggleEditNick'}} >Nick: </h1>
+            {{selectInput type="text" value=newNick class="new-nick" action="saveNick" onEvent="enter" }}
+            <button class="send" {{action 'saveNick' newNick}}>Send</button>
+            {{else}}
+            <h1 class="nick" {{action 'toggleEditNick'}} > Nick: {{ user.nick }}</h1>
+            {{/if}}
+            <a href="#" class="download-audio" {{action 'downloadAudio'}}>Download Audio</a>
+            <video {{bindAttr src=user.videoSrc }} controls id="video"></video>
+        </section>
+        <section class="messages">
+            {{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
+            <button class="send" {{action 'sendMessage' message}}>Send</button>
+            {{message-pane messages=messages}}
+        </section>
+    </div>
+</div>
