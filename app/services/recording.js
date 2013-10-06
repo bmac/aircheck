@@ -13,9 +13,18 @@ Recording.create = function(stream) {
 };
 
 Recording.downloadWAV = function(recording) {
+    return Recording.getAudioBlob(recording).then(function(blob) {
+        Recording.downloadBlob(blob);
+    });
+};
+
+Recording.downloadBlob = function(blob) {
+    Recorder.forceDownload(blob);
+};
+
+Recording.getAudioBlob = function(recording) {
     var promise = new Ember.RSVP.Promise(function(resolve, reject) {
         recording._rec.exportWAV(function(blob) {
-            Recorder.forceDownload(blob);
             resolve(blob);
         });
     });

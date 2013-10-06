@@ -17,7 +17,8 @@ var room = {
         stream: 'some stream',
         videoSrc: 'some video src'
     }],
-    messages: []
+    messages: [],
+    recordong: {recording object}
 };
 */
 
@@ -48,6 +49,11 @@ Room.prototype.setNick = function(newNick) {
     var ircMsg = this._createIrcMsg(msg, 'NICK');
     // send the message to all peers
     this._sendIrcMsg(ircMsg);
+};
+
+Room.prototype.requestAudio = function(peer) {
+    var message = this._createIrcMsg('', 'AUDIOREQ');
+    this._sendIrcMsg(message, peer.socketId);
 };
 
 /*
@@ -99,6 +105,20 @@ Room.prototype._parseNickMsg = function(ircMsg) {
 
 Room.prototype._parseChatMsg = function(ircMsg) {
     this.messages.pushObject(ircMsg);
+};
+
+Room.prototype._parseAudioRequest = function(ircMsg) {
+    if (this.user.sharingAudio) {
+        Recording.getAudioBlob(this.recording).then(function(blob) {
+            var message = this._sendIrcMsg(blob, 'AUDIO');
+            this._sendIrcMsg(message);
+        });
+    }
+};
+
+Room.prototype._parseAudio = function(ircMsg) {
+    var blob = ircMsg.msg;
+    Recording.downloadBlob(blob);
 };
 
 Room.prototype._setupEvents = function() {
