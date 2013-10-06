@@ -73,7 +73,7 @@ var joinRoom = function(nick, roomName) {
             }
         });
         // testing code, so I can load video elements without melting my lap
-        //room.peers.pushObjects(fixture);
+        // room.peers.pushObjects(fixture);
 
         return room;
     });
@@ -81,7 +81,7 @@ var joinRoom = function(nick, roomName) {
 
 var createStream = function() {
     var promise = new Ember.RSVP.Promise(function(resolve, reject) {
-        rtc.createStream({video:false, audio:true}, function(stream){
+        rtc.createStream({video:true, audio:true}, function(stream){
             var objUrl = URL.createObjectURL(stream);
             var streamObject = {
                 videoSrc: objUrl,

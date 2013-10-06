@@ -13,7 +13,7 @@
             <h1 class="nick" {{action 'toggleEditNick'}} > Nick: {{ user.nick }}</h1>
             {{/if}}
             <a href="#" class="download-audio" {{action 'downloadAudio'}}>Download Audio</a>
-            <video {{bindAttr src=user.videoSrc }} controls id="video"></video>
+            <video {{bindAttr src=user.videoSrc }} autoplay id="video"></video>
         </section>
         <section class="messages">
             {{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
