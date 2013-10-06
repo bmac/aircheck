@@ -39,3 +39,9 @@ html, body {
     display: block;
     margin: auto;
 }
+
+.peer-video {
+    width: 80%;
+    display: block;
+    margin: auto;
+}
