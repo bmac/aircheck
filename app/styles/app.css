@@ -1,6 +1,6 @@
 /* Put your CSS here */
 html, body {
-    margin: 20px;
+    height: 100%;
 }
 
 @keyframes domChanged { from { background: yellow; } }
@@ -18,6 +18,22 @@ html, body {
 
 .right-rail {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-pane {
+    flex: auto;
+}
+
+.message-input {
+    height: 2em;
 }
 
 .peer-row {

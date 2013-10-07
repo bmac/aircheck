@@ -16,9 +16,11 @@
             <video {{bindAttr src=user.videoSrc }} autoplay class="user-video"></video>
         </section>
         <section class="messages">
-            {{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
-            <button class="send" {{action 'sendMessage' message}}>Send</button>
             {{message-pane messages=messages}}
+            <div class="message-input">
+                {{input type="text" value=message class="msg" action="sendMessage" onEvent="enter" }}
+                <button class="send" {{action 'sendMessage' message}}>Send</button>
+            </div>
         </section>
     </div>
 </div>
