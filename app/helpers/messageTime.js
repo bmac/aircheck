@@ -4,7 +4,8 @@ var padZero = function(num) {
     }
     return num;
 };
-Ember.Handlebars.registerBoundHelper('messageTime', function(time) {
+
+var messageTime = function(time) {
     var date = new Date(parseInt(time, 10));
     console.log(arguments);
     console.log(time, date.getHours());
@@ -18,9 +19,11 @@ Ember.Handlebars.registerBoundHelper('messageTime', function(time) {
         minutes,
         ':',
         seconds,
-        ']',
+        ']'
         ].join('');
-});
+};
+
+Ember.Handlebars.registerBoundHelper('messageTime', messageTime);
 
 
-export default {};
+export default messageTime;
