@@ -7,8 +7,6 @@ var padZero = function(num) {
 
 var messageTime = function(time) {
     var date = new Date(parseInt(time, 10));
-    console.log(arguments);
-    console.log(time, date.getHours());
     var hours = padZero(date.getHours());
     var minutes = padZero(date.getMinutes());
     var seconds = padZero(date.getSeconds());
