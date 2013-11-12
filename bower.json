@@ -2,11 +2,14 @@
   "name": "aircheck",
   "version": "0.0.0",
   "dependencies": {
-    "ember": "http://builds.emberjs.com/stable/ember.js",
-    "ember-prod": "http://builds.emberjs.com/stable/ember.prod.js",
+    "ember-data-shim": "1.0.0-beta.3",
+    "ember-resolver": "git://github.com/stefanpenner/ember-jj-abrams-resolver.git#master",
     "handlebars": "1.0.0",
     "jquery": "~2.0.3",
     "qunit": "~1.12.0",
     "sinonjs": "~1.7.1"
+  },
+  "resolutions": {
+    "ember": "~> 1.2.0-beta.2"
   }
 }

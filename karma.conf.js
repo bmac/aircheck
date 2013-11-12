@@ -4,24 +4,20 @@
 module.exports = function(config) {
   config.set({
 
-    // base path, that will be used to resolve files and exclude
-    basePath: 'tmp/public',
-
     // list of files / patterns to load in the browser
     files: [
       'vendor/libs/webrtc.io.js',
       'vendor/libs/recorder.js',
       'vendor/sinonjs/sinon.js',
       'vendor/loader.js',
-      'vendor/almond.js',
-      'vendor/resolver.js',
+      'vendor/ember-resolver/dist/ember-resolver.js',
       'vendor/jquery/jquery.js',
       'vendor/handlebars/handlebars.js',
-      'vendor/ember/index.js',
-      'assets/templates.js',
-      'assets/app.js',
-      //'tests/tests.js',
-      '../transpiled/tests/**/*.js',
+      'vendor/ember/ember.js',
+      'vendor/ember-data-shim/ember-data.js',
+      'tmp/result/assets/templates.js',
+      'tmp/result/assets/app.js',
+      'tmp/transpiled/tests/**/*.js',
       'tests/test_helper.js',
       'tests/test_loader.js'
     ],
@@ -38,7 +34,7 @@ module.exports = function(config) {
     ],
 
     preprocessors: {
-      'assets/*.js': 'coverage'
+      'tmp/result/assets/*.js': 'coverage'
     },
 
     // list of files to exclude

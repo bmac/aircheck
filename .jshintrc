@@ -10,7 +10,6 @@
     "setTimeout",
     "Ember",
     "Em",
-    "$",
     "QUnit",
     "define",
     "console",
@@ -37,7 +36,9 @@
     "exists",
     "fillIn",
     "click",
-    "find"
+    "find",
+    "DS",
+    "$"
   ],
   "node" : false,
   "browser" : false,
