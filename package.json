@@ -16,6 +16,7 @@
     "url": "https://github.com/bmac/aircheck"
   },
   "keywords": [],
+  "engine": "node 0.10.20"
   "dependencies": {
     "webrtc.io": "0.0.4",
     "bower": "~1.2.7"
