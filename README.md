@@ -2,6 +2,8 @@ aircheck
 =======
 
 
+## Setup
+
 Run client:
 
 `cd aircheck`
