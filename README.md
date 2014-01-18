@@ -1,6 +1,8 @@
 aircheck
 =======
 
+Audio sharing webapp built on WebRTC.
+
 
 ## Setup
 
