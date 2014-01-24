@@ -1,7 +1,7 @@
 aircheck
 =======
 
-Audio sharing webapp built on WebRTC.
+Audio sharing webapp built on WebRTC and emberjs.
 
 
 ## Setup
