@@ -2,7 +2,6 @@
   "name": "aircheck",
   "version": "0.0.0",
   "dependencies": {
-    "ember-data-shim": "1.0.0-beta.3",
     "ember-resolver": "git://github.com/stefanpenner/ember-jj-abrams-resolver.git#master",
     "handlebars": "1.0.0",
     "jquery": "~2.0.3",
